@@ -1,3 +1,8 @@
+## 0.2.4
+
+* Added some basic string formatting options to `testPhases` to make it a bit
+  less strict if desired.
+
 ## 0.2.3+2
 
 * Added logic to discover the location of the dart SDK when the dart binary is a

@@ -16,13 +16,16 @@ import 'package:unittest/unittest.dart';
 import 'src/test_harness.dart';
 import 'src/dart_sdk.dart';
 
+export 'src/test_harness.dart' show StringFormatter;
+
 /// Defines a test which invokes [applyTransformers].
 testPhases(String testName, List<List<Transformer>> phases,
     Map<String, String> inputs, Map<String, String> results,
-    [List<String> messages]) {
+    [List<String> messages,
+     StringFormatter formatter = StringFormatter.noTrailingWhitespace]) {
   test(testName,
     () => applyTransformers(phases, inputs: inputs, results: results,
-        messages: messages));
+        messages: messages, formatter: formatter));
 }
 
 /// Updates the provided transformers with [inputs] as asset inputs then
@@ -36,9 +39,11 @@ testPhases(String testName, List<List<Transformer>> phases,
 Future applyTransformers(List<List<Transformer>> phases,
     {Map<String, String> inputs: const {},
     Map<String, String> results: const {},
-    List<String> messages: const []}) {
+    List<String> messages: const [],
+    StringFormatter formatter: StringFormatter.noTrailingWhitespace}) {
 
-  var helper = new TestHelper(phases, inputs, messages)..run();
+  var helper = new TestHelper(
+      phases, inputs, messages, formatter: formatter)..run();
   return helper.checkAll(results).then((_) => helper.tearDown());
 }
 

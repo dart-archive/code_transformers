@@ -17,10 +17,6 @@ AssetId idFromString(String s) {
   return new AssetId(s.substring(0, index), s.substring(index + 1));
 }
 
-String _removeTrailingWhitespace(String str) =>
-    str.splitMapJoin('\n',
-        onNonMatch: (s) => s.replaceAll(new RegExp(r'\s+$'), ''));
-
 /// A helper package provider that has files stored in memory, also wraps
 /// [Barback] to simply our tests.
 class TestHelper implements PackageProvider {
@@ -38,11 +34,13 @@ class TestHelper implements PackageProvider {
   var resultSubscription;
   var logSubscription;
 
+  final StringFormatter formatter;
+
   Future<Asset> getAsset(AssetId id) =>
       new Future.value(new Asset.fromString(id, files[idToString(id)]));
 
   TestHelper(List<List<Transformer>> transformers, Map<String, String> files,
-      this.messages)
+      this.messages, {this.formatter: StringFormatter.noTrailingWhitespace})
       : files = files,
         packages = files.keys.map((s) => idFromString(s).package) {
     barback = new Barback(this);
@@ -100,11 +98,13 @@ class TestHelper implements PackageProvider {
 
   Future check(String assetIdString, String content) {
     return this[assetIdString].then((value) {
-      value = _removeTrailingWhitespace(value);
-      content = _removeTrailingWhitespace(content);
+      value = formatter.formatString(value);
+      content = formatter.formatString(content);
       expect(value, content, reason: 'Final output of $assetIdString differs.');
     });
   }
+
+
 
   Future checkAll(Map<String, String> files) {
     return barback.results.first.then((_) {
@@ -122,3 +122,49 @@ class TestHelper implements PackageProvider {
     });
   }
 }
+
+class StringFormatter {
+  // Formatting options
+  final bool stripLeadingWhitespace;
+  final bool stripTrailingWhitespace;
+  final bool stripNewlines;
+
+  // Static variations for convenience
+  static const noLeadingWhitespace =
+      const StringFormatter(stripLeadingWhitespace: true);
+
+  static const noTrailingWhitespace =
+      const StringFormatter(stripTrailingWhitespace: true);
+
+  static const noSurroundingWhitespace = const StringFormatter(
+      stripLeadingWhitespace: true, stripTrailingWhitespace: true);
+
+  static const noNewlines = const StringFormatter(stripNewlines: true);
+
+  static const noNewlinesOrSurroundingWhitespace = const StringFormatter(
+      stripLeadingWhitespace: true,
+      stripTrailingWhitespace: true,
+      stripNewlines: true);
+
+  const StringFormatter({
+      this.stripLeadingWhitespace: false,
+      this.stripTrailingWhitespace: false,
+      this.stripNewlines: false});
+
+  String formatString(String str) {
+    if (stripLeadingWhitespace) str = _removeLeadingWhitespace(str);
+    if (stripTrailingWhitespace) str = _removeTrailingWhitespace(str);
+    if (stripNewlines) str = _removeNewlines(str);
+    return str;
+  }
+}
+
+String _removeTrailingWhitespace(String str) =>
+    str.splitMapJoin('\n',
+        onNonMatch: (s) => s.replaceAll(new RegExp(r'\s+$'), ''));
+
+String _removeLeadingWhitespace(String str) =>
+    str.splitMapJoin('\n',
+        onNonMatch: (s) => s.replaceAll(new RegExp(r'^\s+'), ''));
+
+String _removeNewlines(String str) => str.replaceAll('\n', '');
