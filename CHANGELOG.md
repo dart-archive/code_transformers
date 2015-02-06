@@ -1,3 +1,9 @@
+## 0.2.5
+* Improvements to `dartSdkDirectory` so it has a better chance of success.
+* `BuildLogger` now accepts `AggregateTransform` or `Transform`. If passing in
+an `AggregateTransform` you must also pass in an `AssetId` to use as the primary
+input.
+
 ## 0.2.4
 
 * Added some basic string formatting options to `testPhases` to make it a bit

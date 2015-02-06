@@ -30,8 +30,12 @@ import 'messages.dart' show Message, MessageId, BuildLogEntry, LogEntryTable;
 // TODO(sigmund): also cluster messages when they are reported on the
 // command-line.
 class BuildLogger implements TransformLogger {
-  /// Underling transform that is currently active.
-  final Transform _transform;
+  /// Underling transform that is currently active. This can be either an
+  /// [AggregateTransform] or [Transform].
+  final _transform;
+
+  /// The primary input id.
+  final AssetId _primaryId;
 
   /// Logs created during the current transform.
   final LogEntryTable _logs = new LogEntryTable();
@@ -45,8 +49,13 @@ class BuildLogger implements TransformLogger {
   /// more details at `$detailsUri#packagename_id`.
   final String detailsUri;
 
-  BuildLogger(this._transform, {this.convertErrorsToWarnings: false,
-      this.detailsUri});
+  /// If transform is a [Transform] then [primaryId] will default to the
+  /// primaryInput.id, if it is an [AggregateTransform] then you must pass in
+  /// a [primaryId] to be used, otherwise you will get a runtime error.
+  BuildLogger(transform, {this.convertErrorsToWarnings: false,
+      AssetId primaryId, this.detailsUri})
+      : _transform = transform,
+        _primaryId = primaryId != null ? primaryId : transform.primaryInput.id;
 
   /// Records a message at the fine level. If [msg] is a [Message] it is
   /// recorded directly, otherwise it is first converted to a [String].
@@ -94,20 +103,19 @@ class BuildLogger implements TransformLogger {
 
   /// Outputs the log data to a JSON serialized file.
   Future writeOutput() {
-    return _getNextLogAssetPath().then((path) {
-      _transform.addOutput(new Asset.fromString(path,
-          JSON.encode(_logs)));
+    return _getNextLogAssetId().then((id) {
+      _transform.addOutput(new Asset.fromString(id, JSON.encode(_logs)));
     });
   }
 
   // Each phase outputs a new log file with an incrementing # appended, this
   // figures out the next # to use.
-  Future<String> _getNextLogAssetPath([int nextNumber = 1]) {
-    var nextAssetPath = _transform.primaryInput.id.addExtension(
+  Future<AssetId> _getNextLogAssetId([int nextNumber = 1]) {
+    var nextAssetPath = _primaryId.addExtension(
         '${LOG_EXTENSION}.$nextNumber');
     return _transform.hasInput(nextAssetPath).then((exists) {
       if (!exists) return nextAssetPath;
-      return _getNextLogAssetPath(++nextNumber);
+      return _getNextLogAssetId(++nextNumber);
     });
   }
 
@@ -124,13 +132,15 @@ class BuildLogger implements TransformLogger {
     });
   }
 
-  // Combines all existing ._buildLogs.* files into a single ._buildLogs file.
-  static Future combineLogFiles(Transform transform) {
+  /// Combines all existing ._buildLogs.* files into a single ._buildLogs file.
+  /// [transform] may be a [Transform] or [AggregateTransform]. If an
+  /// [AggregateTransform] is passed then [primaryId] must also be passed.
+  static Future combineLogFiles(transform, [AssetId primaryId]) {
+    if (primaryId == null) primaryId = transform.primaryInput.id;
     var entries = new LogEntryTable();
-    var id = transform.primaryInput.id;
-    return _readLogFilesForAsset(id, transform, entries).then((_) {
+    return _readLogFilesForAsset(primaryId, transform, entries).then((_) {
       return transform.addOutput(new Asset.fromString(
-          id.addExtension(LOG_EXTENSION),
+          primaryId.addExtension(LOG_EXTENSION),
           JSON.encode(entries.toJson())));
     });
   }
