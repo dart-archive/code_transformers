@@ -4,14 +4,14 @@
 
 library code_transformers.src.dart_sdk;
 
-import 'dart:convert' as convert;
-import 'dart:io' show File, Link, Platform, Process;
-import 'package:path/path.dart' as path;
+import 'dart:io' show Directory;
+
 import 'package:analyzer/src/generated/engine.dart';
 import 'package:analyzer/src/generated/java_io.dart';
 import 'package:analyzer/src/generated/sdk.dart';
 import 'package:analyzer/src/generated/sdk_io.dart' show DirectoryBasedDartSdk;
 import 'package:analyzer/src/generated/source.dart';
+import 'package:cli_util/cli_util.dart' as cli_util;
 
 
 /// Attempts to provide the current Dart SDK directory.
@@ -20,43 +20,8 @@ import 'package:analyzer/src/generated/source.dart';
 ///
 /// Note that this may not be correct when executing outside of `pub`.
 String get dartSdkDirectory {
-
-  bool isSdkDir(String dirname) =>
-      new File(path.join(dirname, 'lib', '_internal', 'libraries.dart'))
-      .existsSync();
-
-  String executable = Platform.executable;
-  if (path.split(executable).length == 1) {
-    // TODO(blois): make this cross-platform.
-    // HACK: A single part, hope it's on the path.
-    executable = Process.runSync('which', ['dart'],
-        stdoutEncoding: convert.UTF8).stdout.trim();
-    // In case Dart is symlinked (e.g. homebrew on Mac) follow symbolic links.
-    var link = new Link(executable);
-    if (link.existsSync()) {
-      executable = link.resolveSymbolicLinksSync();
-    }
-    var sdkDir = path.dirname(path.dirname(executable));
-    if (isSdkDir(sdkDir)) return sdkDir;
-  }
-
-  var dartDir = path.dirname(path.absolute(executable));
-  // If there's a sub-dir named dart-sdk then we're most likely executing from
-  // a dart enlistment build directory.
-  if (isSdkDir(path.join(dartDir, 'dart-sdk'))) {
-    return path.join(dartDir, 'dart-sdk');
-  }
-  // If we can find libraries.dart then it's the root of the SDK.
-  if (isSdkDir(dartDir)) return dartDir;
-
-  var parts = path.split(dartDir);
-  // If the dart executable is within the sdk dir then get the root.
-  if (parts.contains('dart-sdk')) {
-    var dartSdkDir = path.joinAll(parts.take(parts.indexOf('dart-sdk') + 1));
-    if (isSdkDir(dartSdkDir)) return dartSdkDir;
-  }
-
-  return null;
+  Directory sdkDir = cli_util.getSdkDir();
+  return sdkDir != null ? sdkDir.path : null;
 }
 
 /// Sources that are annotated with a source uri, so it is easy to resolve how
