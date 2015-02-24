@@ -5,7 +5,6 @@
 /// Transformer that removes any sourcemap comments from javascript files.
 library code_transformers.src.remove_sourcemap_comment;
 
-import 'dart:async';
 import 'package:barback/barback.dart';
 
 /// Transformer that removes any sourcemap comments from javascript files.

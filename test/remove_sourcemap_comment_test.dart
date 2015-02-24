@@ -8,7 +8,6 @@ import 'package:barback/barback.dart';
 import 'package:code_transformers/src/remove_sourcemap_comment.dart';
 import 'package:code_transformers/tests.dart';
 import 'package:unittest/compact_vm_config.dart';
-import 'package:unittest/unittest.dart';
 
 final phases = [[new RemoveSourcemapComment.asPlugin(
     new BarbackSettings({}, BarbackMode.RELEASE))]];

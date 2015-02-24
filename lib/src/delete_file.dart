@@ -5,7 +5,6 @@
 /// Transformer that deletes everything that it sees, but only in release mode.
 library code_transformers.src.delete_file;
 
-import 'dart:async';
 import 'package:barback/barback.dart';
 
 // Deletes all files supplied in release mode.
