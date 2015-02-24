@@ -13,7 +13,6 @@ import 'package:analyzer/src/generated/sdk_io.dart' show DirectoryBasedDartSdk;
 import 'package:analyzer/src/generated/source.dart';
 import 'package:cli_util/cli_util.dart' as cli_util;
 
-
 /// Attempts to provide the current Dart SDK directory.
 ///
 /// This will return null if the SDK cannot be found
@@ -44,11 +43,10 @@ class DirectoryBasedDartSdkProxy extends DirectoryBasedDartSdk {
 /// with URIs.
 class DartUriResolverProxy implements DartUriResolver {
   final DartUriResolver _proxy;
-  DartUriResolverProxy(DartSdk sdk) :
-      _proxy = new DartUriResolver(sdk);
+  DartUriResolverProxy(DartSdk sdk) : _proxy = new DartUriResolver(sdk);
 
   Source resolveAbsolute(Uri uri) =>
-    DartSourceProxy.wrap(_proxy.resolveAbsolute(uri), uri);
+      DartSourceProxy.wrap(_proxy.resolveAbsolute(uri), uri);
 
   DartSdk get dartSdk => _proxy.dartSdk;
 
@@ -98,7 +96,7 @@ class DartSourceProxy implements UriAnnotatedSource {
   bool exists() => _proxy.exists();
 
   bool operator ==(Object other) =>
-    (other is DartSourceProxy && _proxy == other._proxy);
+      (other is DartSourceProxy && _proxy == other._proxy);
 
   int get hashCode => _proxy.hashCode;
 
@@ -116,7 +114,6 @@ class DartSourceProxy implements UriAnnotatedSource {
 
   bool get isInSystemLibrary => _proxy.isInSystemLibrary;
 }
-
 
 /// Dart SDK which contains a mock implementation of the SDK libraries. May be
 /// used to speed up resultion when most of the core libraries is not needed.
@@ -157,8 +154,8 @@ class MockDartSdk implements DartSdk {
     var src = _sources[uri];
     if (src == null) {
       if (reportMissing) print('warning: missing mock for $uri.');
-      _sources[uri] = src =
-          new _MockSdkSource(uri, 'library dart.${uri.path};');
+      _sources[uri] =
+          src = new _MockSdkSource(uri, 'library dart.${uri.path};');
     }
     return src;
   }

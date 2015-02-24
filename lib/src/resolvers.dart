@@ -53,8 +53,8 @@ class Resolvers {
   /// resolver.
   Future<Resolver> get(Transform transform, [List<AssetId> entryPoints]) {
     var id = transform.primaryInput.id;
-    var resolver = _resolvers.putIfAbsent(id,
-        () => new ResolverImpl(dartSdk, dartUriResolver, options: options));
+    var resolver = _resolvers.putIfAbsent(
+        id, () => new ResolverImpl(dartSdk, dartUriResolver, options: options));
     return resolver.resolve(transform, entryPoints);
   }
 }
@@ -84,7 +84,6 @@ abstract class ResolverTransformer implements Transformer {
   /// [isPossibleDartEntry]).
   Future<bool> shouldApplyResolver(Asset asset) => isPossibleDartEntry(asset);
 
-
   /// This provides a default implementation of `Transformer.apply` that will
   /// get and release resolvers automatically. Internally this:
   ///   * Gets a resolver associated with the transform primary input.
@@ -96,9 +95,8 @@ abstract class ResolverTransformer implements Transformer {
   /// to run the resolver on.
   Future apply(Transform transform) =>
       shouldApplyResolver(transform.primaryInput).then((result) {
-        if (result) return applyToEntryPoints(transform);
-      });
-
+    if (result) return applyToEntryPoints(transform);
+  });
 
   /// Helper function to make it easy to write an `Transformer.apply` method
   /// that automatically gets and releases the resolver. This is typically used
@@ -110,10 +108,10 @@ abstract class ResolverTransformer implements Transformer {
   ///    }
   Future applyToEntryPoints(Transform transform, [List<AssetId> entryPoints]) {
     return resolvers.get(transform, entryPoints).then((resolver) {
-      return new Future(() => applyResolver(transform, resolver))
-        .whenComplete(() {
-          resolver.release();
-        });
+      return new Future(() => applyResolver(transform, resolver)).whenComplete(
+          () {
+        resolver.release();
+      });
     });
   }
 

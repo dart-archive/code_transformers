@@ -9,9 +9,7 @@ import 'package:code_transformers/messages/messages.dart';
 
 const NO_ABSOLUTE_PATHS = const MessageTemplate(
     const MessageId('code_transformers', 1),
-    'absolute paths not allowed: "%-url-%"',
-    'Absolute paths not allowed',
-    '''
+    'absolute paths not allowed: "%-url-%"', 'Absolute paths not allowed', '''
 The transformers processing your code were trying to resolve a URL and identify
 a file that they correspond to. Currently only relative paths can be resolved.
 ''');
@@ -21,9 +19,7 @@ const INVALID_URL_TO_OTHER_PACKAGE = const MessageTemplate(
     'Invalid URL to reach to another package: %-url-%. Path '
     'reaching to other packages must first reach up all the '
     'way to the %-prefix-% directory. For example, try changing the URL '
-    'to: %-fixedUrl-%',
-    'Invalid URL to reach another package',
-    '''
+    'to: %-fixedUrl-%', 'Invalid URL to reach another package', '''
 To reach an asset that belongs to another package, use `package:` URLs in
 Dart code, but in any other language (like HTML or CSS) use relative URLs that
 first go all the way to the `packages/` directory.
@@ -38,8 +34,7 @@ const INVALID_PREFIX_PATH = const MessageTemplate(
     const MessageId('code_transformers', 3),
     'incomplete %-prefix-%/ path. It should have at least 3 '
     'segments %-prefix-%/name/path_from_name\'s_%-folder-%_dir',
-    'Incomplete URL to asset in another package',
-    '''
+    'Incomplete URL to asset in another package', '''
 URLs that refer to assets in other packages need to explicitly mention the
 `packages/` directory. In the future this requirement might be removed, but for
 now you must use a canonical URL form for it.

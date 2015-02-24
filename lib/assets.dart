@@ -27,8 +27,9 @@ import 'src/messages.dart';
 /// package, or when [errorsOnAbsolute] is true and the url seems to be
 /// absolute.
 // TODO(sigmund): delete once this is part of barback (dartbug.com/12610)
-AssetId uriToAssetId(AssetId source, String url, TransformLogger logger,
-    SourceSpan span, {bool errorOnAbsolute: true}) {
+AssetId uriToAssetId(
+    AssetId source, String url, TransformLogger logger, SourceSpan span,
+    {bool errorOnAbsolute: true}) {
   if (url == null || url == '') return null;
   var uri = Uri.parse(url);
   var urlBuilder = path.url;
@@ -36,8 +37,8 @@ AssetId uriToAssetId(AssetId source, String url, TransformLogger logger,
     if (source.extension == '.dart' && uri.scheme == 'package') {
       var index = uri.path.indexOf('/');
       if (index != -1) {
-        return new AssetId(uri.path.substring(0, index),
-            'lib${uri.path.substring(index)}');
+        return new AssetId(
+            uri.path.substring(0, index), 'lib${uri.path.substring(index)}');
       }
     }
 
@@ -48,11 +49,11 @@ AssetId uriToAssetId(AssetId source, String url, TransformLogger logger,
     return null;
   }
 
-  var targetPath = urlBuilder.normalize(
-      urlBuilder.join(urlBuilder.dirname(source.path), url));
+  var targetPath = urlBuilder
+      .normalize(urlBuilder.join(urlBuilder.dirname(source.path), url));
   var segments = urlBuilder.split(targetPath);
   var sourceSegments = urlBuilder.split(source.path);
-  assert (sourceSegments.length > 0);
+  assert(sourceSegments.length > 0);
   var topFolder = sourceSegments[0];
   var entryFolder = topFolder != 'lib' && topFolder != 'asset';
 
@@ -85,8 +86,8 @@ AssetId uriToAssetId(AssetId source, String url, TransformLogger logger,
       fixedSegments.addAll(sourceSegments.map((_) => '..'));
       fixedSegments.addAll(segments.sublist(index));
       var fixedUrl = urlBuilder.joinAll(fixedSegments);
-      var msg = INVALID_URL_TO_OTHER_PACKAGE.create(
-          {'url': url, 'prefix': prefix, 'fixedUrl': fixedUrl});
+      var msg = INVALID_URL_TO_OTHER_PACKAGE
+          .create({'url': url, 'prefix': prefix, 'fixedUrl': fixedUrl});
       logger.warning(logger is BuildLogger ? msg : msg.snippet, span: span);
       return null;
     }
@@ -96,8 +97,8 @@ AssetId uriToAssetId(AssetId source, String url, TransformLogger logger,
   return new AssetId(source.package, targetPath);
 }
 
-AssetId _extractOtherPackageId(int index, List segments,
-    TransformLogger logger, SourceSpan span) {
+AssetId _extractOtherPackageId(
+    int index, List segments, TransformLogger logger, SourceSpan span) {
   if (index >= segments.length) return null;
   var prefix = segments[index];
   if (prefix != 'packages' && prefix != 'assets') return null;

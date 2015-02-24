@@ -52,8 +52,8 @@ class BuildLogger implements TransformLogger {
   /// If transform is a [Transform] then [primaryId] will default to the
   /// primaryInput.id, if it is an [AggregateTransform] then you must pass in
   /// a [primaryId] to be used, otherwise you will get a runtime error.
-  BuildLogger(transform, {this.convertErrorsToWarnings: false,
-      AssetId primaryId, this.detailsUri})
+  BuildLogger(transform,
+      {this.convertErrorsToWarnings: false, AssetId primaryId, this.detailsUri})
       : _transform = transform,
         _primaryId = primaryId != null ? primaryId : transform.primaryInput.id;
 
@@ -111,8 +111,7 @@ class BuildLogger implements TransformLogger {
   // Each phase outputs a new log file with an incrementing # appended, this
   // figures out the next # to use.
   Future<AssetId> _getNextLogAssetId([int nextNumber = 1]) {
-    var nextAssetPath = _primaryId.addExtension(
-        '${LOG_EXTENSION}.$nextNumber');
+    var nextAssetPath = _primaryId.addExtension('${LOG_EXTENSION}.$nextNumber');
     return _transform.hasInput(nextAssetPath).then((exists) {
       if (!exists) return nextAssetPath;
       return _getNextLogAssetId(++nextNumber);
@@ -120,8 +119,9 @@ class BuildLogger implements TransformLogger {
   }
 
   // Reads all log files for an Asset into [logs].
-  static Future _readLogFilesForAsset(AssetId id, Transform transform,
-      LogEntryTable entries, [nextNumber = 1]) {
+  static Future _readLogFilesForAsset(
+      AssetId id, Transform transform, LogEntryTable entries,
+      [nextNumber = 1]) {
     var nextAssetPath = id.addExtension('${LOG_EXTENSION}.$nextNumber');
     return transform.hasInput(nextAssetPath).then((exists) {
       if (!exists) return null;

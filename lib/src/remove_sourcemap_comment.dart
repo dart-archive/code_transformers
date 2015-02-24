@@ -21,8 +21,8 @@ class RemoveSourcemapComment extends Transformer {
     var id = transform.primaryInput.id;
     return transform.readInputAsString(id).then((file) {
       if (file.contains(_SOURCE_MAP_COMMENT)) {
-        transform.addOutput(new Asset.fromString(
-            id, file.replaceAll(_SOURCE_MAP_COMMENT, '')));
+        transform.addOutput(
+            new Asset.fromString(id, file.replaceAll(_SOURCE_MAP_COMMENT, '')));
       }
     });
   }

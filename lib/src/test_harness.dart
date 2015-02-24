@@ -70,8 +70,9 @@ class TestHelper implements PackageProvider {
 
       var msg = '${entry.level.name.toLowerCase()}: ${entry.message}';
       var span = entry.span;
-      var spanInfo = span == null ? '' :
-          ' (${span.sourceUrl} ${span.start.line} ${span.start.column})';
+      var spanInfo = span == null
+          ? ''
+          : ' (${span.sourceUrl} ${span.start.line} ${span.start.column})';
       expect(messagesSeen, lessThan(messages.length),
           reason: 'more messages than expected.\nMessage seen: $msg$spanInfo');
       expect('$msg$spanInfo', messages[messagesSeen++]);
@@ -91,8 +92,9 @@ class TestHelper implements PackageProvider {
     barback.updateSources(paths.map(idFromString));
   }
 
-  Future<String> operator [](String assetString){
-    return barback.getAssetById(idFromString(assetString))
+  Future<String> operator [](String assetString) {
+    return barback
+        .getAssetById(idFromString(assetString))
         .then((asset) => asset.readAsString());
   }
 
@@ -103,8 +105,6 @@ class TestHelper implements PackageProvider {
       expect(value, content, reason: 'Final output of $assetIdString differs.');
     });
   }
-
-
 
   Future checkAll(Map<String, String> files) {
     return barback.results.first.then((_) {
@@ -117,8 +117,8 @@ class TestHelper implements PackageProvider {
     }).then((_) {
       // We only check messages when an expectation is provided.
       if (messages == null) return;
-      expect(messagesSeen, messages.length,
-          reason: 'less messages than expected');
+      expect(
+          messagesSeen, messages.length, reason: 'less messages than expected');
     });
   }
 }
@@ -146,10 +146,8 @@ class StringFormatter {
       stripTrailingWhitespace: true,
       stripNewlines: true);
 
-  const StringFormatter({
-      this.stripLeadingWhitespace: false,
-      this.stripTrailingWhitespace: false,
-      this.stripNewlines: false});
+  const StringFormatter({this.stripLeadingWhitespace: false,
+      this.stripTrailingWhitespace: false, this.stripNewlines: false});
 
   String formatString(String str) {
     if (stripLeadingWhitespace) str = _removeLeadingWhitespace(str);
@@ -159,12 +157,10 @@ class StringFormatter {
   }
 }
 
-String _removeTrailingWhitespace(String str) =>
-    str.splitMapJoin('\n',
-        onNonMatch: (s) => s.replaceAll(new RegExp(r'\s+$'), ''));
+String _removeTrailingWhitespace(String str) => str.splitMapJoin('\n',
+    onNonMatch: (s) => s.replaceAll(new RegExp(r'\s+$'), ''));
 
-String _removeLeadingWhitespace(String str) =>
-    str.splitMapJoin('\n',
-        onNonMatch: (s) => s.replaceAll(new RegExp(r'^\s+'), ''));
+String _removeLeadingWhitespace(String str) => str.splitMapJoin('\n',
+    onNonMatch: (s) => s.replaceAll(new RegExp(r'^\s+'), ''));
 
 String _removeNewlines(String str) => str.replaceAll('\n', '');

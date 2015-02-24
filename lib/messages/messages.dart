@@ -31,7 +31,7 @@ class MessageId implements Comparable {
   /// Serialize this message. We use a string and not a map to encode ids so
   /// they can be used as keys in JSON maps.
   String toJson() => toString();
-  
+
   toString() => '${package}#$id';
 
   int compareTo(MessageId other) {
@@ -44,8 +44,8 @@ class MessageId implements Comparable {
   factory MessageId.fromJson(data) {
     var index = data.lastIndexOf('#');
     if (index == -1) throw 'Invalid message id: $data';
-    return new MessageId(data.substring(0, index),
-        int.parse(data.substring(index + 1)));
+    return new MessageId(
+        data.substring(0, index), int.parse(data.substring(index + 1)));
   }
 
   operator ==(MessageId other) => package == other.package && id == other.id;
@@ -70,8 +70,8 @@ class Message {
   String toString() => 'id: $id, snippet: $snippet';
 
   /// Creates a new [Message] from an encoded value produced via [toJson].
-  factory Message.fromJson(data) => new Message(
-      new MessageId.fromJson(data['id']), data['snippet']);
+  factory Message.fromJson(data) =>
+      new Message(new MessageId.fromJson(data['id']), data['snippet']);
 }
 
 /// Template for a message. Templates can include placeholders to indicate
@@ -164,10 +164,7 @@ class BuildLogEntry {
 
   /// Serializes this log entry to JSON.
   Map toJson() {
-    var data = {
-        'level': level,
-        'message': message.toJson(),
-    };
+    var data = {'level': level, 'message': message.toJson(),};
     if (span != null) {
       data['span'] = {
         'start': {
@@ -201,12 +198,11 @@ class LogEntryTable {
     var res = new LogEntryTable();
     for (String key in json.keys) {
       var id = new MessageId.fromJson(key);
-      res.entries[id] = json[key]
-          .map((v) => new BuildLogEntry.fromJson(v)).toList();
+      res.entries[id] =
+          json[key].map((v) => new BuildLogEntry.fromJson(v)).toList();
     }
     return res;
   }
-
 
   /// Serializes this entire table as JSON.
   Map toJson() {

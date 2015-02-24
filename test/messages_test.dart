@@ -14,35 +14,32 @@ main() {
   group('snippet', () {
     test('template with no-args works', () {
       expect(new MessageTemplate(_id('code_transformers', 1),
-            'this message has no args', '', '').snippet,
+              'this message has no args', '', '').snippet,
           'this message has no args');
     });
 
     test('template with args throws', () {
       expect(() => new MessageTemplate(_id('code_transformers', 1),
-            'this message has %-args-%', '', '')
-          .snippet,
-          throws);
+          'this message has %-args-%', '', '').snippet, throws);
     });
 
     test('can pass arguments to create snippet', () {
       expect(new MessageTemplate(_id('code_transformers', 1),
-            'a %-b-% c something %-name-% too', '', '')
-          .create({'b': "1", 'name': 'foo'}).snippet,
+                  'a %-b-% c something %-name-% too', '', '')
+              .create({'b': "1", 'name': 'foo'}).snippet,
           'a 1 c something foo too');
     });
   });
 
   test('equals', () {
-      expect(new MessageId('hi', 23) == new MessageId('hi', 23), isTrue);
-      expect(new MessageId('foo', 23) != new MessageId('bar', 23), isTrue);
-      expect(new MessageId('foo', 22) != new MessageId('foo', 23), isTrue);
+    expect(new MessageId('hi', 23) == new MessageId('hi', 23), isTrue);
+    expect(new MessageId('foo', 23) != new MessageId('bar', 23), isTrue);
+    expect(new MessageId('foo', 22) != new MessageId('foo', 23), isTrue);
   });
 
   for (var encode in [true, false]) {
-    var toJson = encode 
-        ? (o) => o.toJson()
-        : (o) => JSON.decode(JSON.encode(o));
+    var toJson =
+        encode ? (o) => o.toJson() : (o) => JSON.decode(JSON.encode(o));
     group('serialize/deserialize ${encode ? "and stringify": ""}', () {
       test('message id', () {
         _eq(msg) {
@@ -63,7 +60,8 @@ main() {
           expect(msg.snippet, parsed.snippet);
         }
         _eq(new Message(_id('hi', 33), 'snippet here'));
-        _eq(new MessageTemplate(_id('hi', 33), 'snippet', 'ignored', 'ignored'));
+        _eq(new MessageTemplate(
+            _id('hi', 33), 'snippet', 'ignored', 'ignored'));
       });
 
       test('log entry', () {
@@ -103,9 +101,7 @@ main() {
 }
 _id(s, i) => new MessageId(s, i);
 _entry(id, snippet, offset) => new BuildLogEntry(
-    new Message(_id('hi', id), snippet),
-    new SourceSpan(
-      new SourceLocation(offset, sourceUrl: 'a', line: 1, column: 3),
-      new SourceLocation(offset + 2, sourceUrl: 'a', line: 1, column: 5),
-      'hi'),
-    'Warning');
+    new Message(_id('hi', id), snippet), new SourceSpan(
+        new SourceLocation(offset, sourceUrl: 'a', line: 1, column: 3),
+        new SourceLocation(offset + 2, sourceUrl: 'a', line: 1, column: 5),
+        'hi'), 'Warning');

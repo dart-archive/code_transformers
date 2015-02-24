@@ -13,7 +13,6 @@ import 'package:barback/barback.dart';
 import 'package:source_maps/refactor.dart';
 import 'package:source_span/source_span.dart';
 
-
 /// Class for working with a barback based resolved AST.
 abstract class Resolver {
   /// Update the status of all the sources referenced by the entry points and

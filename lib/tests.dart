@@ -22,10 +22,12 @@ export 'src/test_harness.dart' show StringFormatter;
 testPhases(String testName, List<List<Transformer>> phases,
     Map<String, String> inputs, Map<String, String> results,
     [List<String> messages,
-     StringFormatter formatter = StringFormatter.noTrailingWhitespace]) {
-  test(testName,
-    () => applyTransformers(phases, inputs: inputs, results: results,
-        messages: messages, formatter: formatter));
+    StringFormatter formatter = StringFormatter.noTrailingWhitespace]) {
+  test(testName, () => applyTransformers(phases,
+      inputs: inputs,
+      results: results,
+      messages: messages,
+      formatter: formatter));
 }
 
 /// Updates the provided transformers with [inputs] as asset inputs then
@@ -37,13 +39,11 @@ testPhases(String testName, List<List<Transformer>> phases,
 /// If [messages] is non-null then this will validate that only the specified
 /// messages were generated, ignoring info messages.
 Future applyTransformers(List<List<Transformer>> phases,
-    {Map<String, String> inputs: const {},
-    Map<String, String> results: const {},
-    List<String> messages: const [],
+    {Map<String, String> inputs: const {}, Map<String, String> results: const {
+}, List<String> messages: const [],
     StringFormatter formatter: StringFormatter.noTrailingWhitespace}) {
-
-  var helper = new TestHelper(
-      phases, inputs, messages, formatter: formatter)..run();
+  var helper = new TestHelper(phases, inputs, messages, formatter: formatter)
+    ..run();
   return helper.checkAll(results).then((_) => helper.tearDown());
 }
 

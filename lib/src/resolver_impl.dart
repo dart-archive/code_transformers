@@ -7,8 +7,8 @@ library code_transformer.src.resolver_impl;
 import 'dart:async';
 import 'package:analyzer/analyzer.dart' show parseDirectives;
 import 'package:analyzer/src/generated/ast.dart' hide ConstantEvaluator;
-import 'package:analyzer/src/generated/constant.dart' show ConstantEvaluator,
-       EvaluationResult;
+import 'package:analyzer/src/generated/constant.dart'
+    show ConstantEvaluator, EvaluationResult;
 import 'package:analyzer/src/generated/element.dart';
 import 'package:analyzer/src/generated/engine.dart';
 import 'package:analyzer/src/generated/sdk.dart' show DartSdk;
@@ -31,8 +31,8 @@ final path = native_path.url;
 /// with the resolved AST.
 class ResolverImpl implements Resolver {
   /// Cache of all asset sources currently referenced.
-  final Map<AssetId, _AssetBasedSource> sources =
-      <AssetId, _AssetBasedSource>{};
+  final Map<AssetId, _AssetBasedSource> sources = <AssetId, _AssetBasedSource>{
+  };
 
   final InternalAnalysisContext _context =
       AnalysisEngine.instance.createAnalysisContext();
@@ -62,8 +62,8 @@ class ResolverImpl implements Resolver {
     }
     _context.analysisOptions = options;
     sdk.context.analysisOptions = options;
-    _context.sourceFactory = new SourceFactory([dartUriResolver,
-        new _AssetUriResolver(this)]);
+    _context.sourceFactory =
+        new SourceFactory([dartUriResolver, new _AssetUriResolver(this)]);
   }
 
   LibraryElement getLibrary(AssetId assetId) {
@@ -78,7 +78,7 @@ class ResolverImpl implements Resolver {
     var future = _lastPhaseComplete.whenComplete(() {
       _currentPhaseComplete = phaseComplete;
       return _performResolve(transform,
-        entryPoints == null ? [transform.primaryInput.id] : entryPoints);
+          entryPoints == null ? [transform.primaryInput.id] : entryPoints);
     }).then((_) => this);
     // Advance the lastPhaseComplete to be done when this phase is all done.
     _lastPhaseComplete = phaseComplete.future;
@@ -121,13 +121,13 @@ class ResolverImpl implements Resolver {
         }
         source.updateDependencies(contents);
         toUpdate.add(new _PendingUpdate(source, contents));
-        source.dependentAssets.where((id) => !visited.contains(id))
+        source.dependentAssets
+            .where((id) => !visited.contains(id))
             .forEach(processAsset);
       }, onError: (e) {
         var source = sources[assetId];
         if (source != null && source.exists()) {
-          _context.applyChanges(
-              new ChangeSet()..removedSource(source));
+          _context.applyChanges(new ChangeSet()..removedSource(source));
           sources[assetId].updateContents(null);
         }
       }));
@@ -139,9 +139,8 @@ class ResolverImpl implements Resolver {
     return visiting.future.then((_) {
       var changeSet = new ChangeSet();
       toUpdate.forEach((pending) => pending.apply(changeSet));
-      var unreachableAssets = sources.keys.toSet()
-          .difference(visited)
-          .map((id) => sources[id]);
+      var unreachableAssets =
+          sources.keys.toSet().difference(visited).map((id) => sources[id]);
       for (var unreachable in unreachableAssets) {
         changeSet.removedSource(unreachable);
         unreachable.updateContents(null);
@@ -187,8 +186,8 @@ class ResolverImpl implements Resolver {
     var dotIndex = typeName.lastIndexOf('.');
     var libraryName = dotIndex == -1 ? '' : typeName.substring(0, dotIndex);
 
-    var className = dotIndex == -1 ?
-        typeName : typeName.substring(dotIndex + 1);
+    var className =
+        dotIndex == -1 ? typeName : typeName.substring(dotIndex + 1);
 
     for (var lib in libraries.where((l) => l.name == libraryName)) {
       var type = lib.getType(className);
@@ -201,28 +200,27 @@ class ResolverImpl implements Resolver {
     var dotIndex = variableName.lastIndexOf('.');
     var libraryName = dotIndex == -1 ? '' : variableName.substring(0, dotIndex);
 
-    var name = dotIndex == -1 ?
-        variableName : variableName.substring(dotIndex + 1);
+    var name =
+        dotIndex == -1 ? variableName : variableName.substring(dotIndex + 1);
 
-    return libraries.where((lib) => lib.name == libraryName)
+    return libraries
+        .where((lib) => lib.name == libraryName)
         .expand((lib) => lib.units)
         .expand((unit) => unit.topLevelVariables)
-        .firstWhere((variable) => variable.name == name,
-            orElse: () => null);
+        .firstWhere((variable) => variable.name == name, orElse: () => null);
   }
 
   Element getLibraryFunction(String fnName) {
     var dotIndex = fnName.lastIndexOf('.');
     var libraryName = dotIndex == -1 ? '' : fnName.substring(0, dotIndex);
 
-    var name = dotIndex == -1 ?
-        fnName : fnName.substring(dotIndex + 1);
+    var name = dotIndex == -1 ? fnName : fnName.substring(dotIndex + 1);
 
-    return libraries.where((lib) => lib.name == libraryName)
+    return libraries
+        .where((lib) => lib.name == libraryName)
         .expand((lib) => lib.units)
         .expand((unit) => unit.functions)
-        .firstWhere((fn) => fn.name == name,
-            orElse: () => null);
+        .firstWhere((fn) => fn.name == name, orElse: () => null);
   }
 
   EvaluationResult evaluateConstant(
@@ -233,7 +231,6 @@ class ResolverImpl implements Resolver {
 
   Uri getImportUri(LibraryElement lib, {AssetId from}) =>
       _getSourceUri(lib, from: from);
-
 
   /// Similar to getImportUri but will get the part URI for parts rather than
   /// the library URI.
@@ -315,11 +312,13 @@ class _AssetBasedSource extends Source {
     if (contents == _contents) return;
     var unit = parseDirectives(contents, suppressErrors: true);
     _dependentAssets = unit.directives
-        .where((d) => (d is ImportDirective || d is PartDirective ||
+        .where((d) => (d is ImportDirective ||
+            d is PartDirective ||
             d is ExportDirective))
-        .map((d) => _resolve(assetId, d.uri.stringValue, _logger,
-              _getSpan(d, contents)))
-        .where((id) => id != null).toSet();
+        .map((d) => _resolve(
+            assetId, d.uri.stringValue, _logger, _getSpan(d, contents)))
+        .where((id) => id != null)
+        .toSet();
   }
 
   /// Update the contents of this file with [contents].
@@ -468,15 +467,16 @@ class _AssetUriResolver implements UriResolver {
 }
 
 /// Get an asset ID for a URL relative to another source asset.
-AssetId _resolve(AssetId source, String url, TransformLogger logger,
-    SourceSpan span) {
+AssetId _resolve(
+    AssetId source, String url, TransformLogger logger, SourceSpan span) {
   if (url == null || url == '') return null;
   var uri = Uri.parse(url);
 
   // Workaround for dartbug.com/17156- pub transforms package: imports from
   // files of the transformers package to have absolute /packages/ URIs.
-  if (uri.scheme == '' && path.isAbsolute(url)
-      && uri.pathSegments[0] == 'packages') {
+  if (uri.scheme == '' &&
+      path.isAbsolute(url) &&
+      uri.pathSegments[0] == 'packages') {
     uri = Uri.parse('package:${uri.pathSegments.skip(1).join(path.separator)}');
   }
 
@@ -491,7 +491,6 @@ AssetId _resolve(AssetId source, String url, TransformLogger logger,
 
   return uriToAssetId(source, url, logger, span);
 }
-
 
 /// A completer that waits until all added [Future]s complete.
 // TODO(blois): Copied from quiver. Remove from here when it gets

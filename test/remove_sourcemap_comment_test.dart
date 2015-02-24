@@ -9,18 +9,22 @@ import 'package:code_transformers/src/remove_sourcemap_comment.dart';
 import 'package:code_transformers/tests.dart';
 import 'package:unittest/compact_vm_config.dart';
 
-final phases = [[new RemoveSourcemapComment.asPlugin(
-    new BarbackSettings({}, BarbackMode.RELEASE))]];
+final phases = [
+  [
+    new RemoveSourcemapComment.asPlugin(
+        new BarbackSettings({}, BarbackMode.RELEASE))
+  ]
+];
 
 void main() {
   useCompactVMConfiguration();
 
   testPhases('removes sourcemap comments', phases, {
-      'a|web/test.js': '''
+    'a|web/test.js': '''
           var i = 0;
           //# sourceMappingURL=*.map''',
   }, {
-      'a|web/test.js': '''
+    'a|web/test.js': '''
           var i = 0;''',
   });
 }

@@ -15,25 +15,19 @@ import 'package:unittest/unittest.dart';
 main() {
   useCompactVMConfiguration();
 
-
-  void testAssetUri(String name,
-      {AssetId source, String uri, AssetId result, String message,
-      bool errorOnAbsolute: true}) {
+  void testAssetUri(String name, {AssetId source, String uri, AssetId result,
+      String message, bool errorOnAbsolute: true}) {
     test(name, () {
       var transformer = new Validator((transform) {
-      var assetId = uriToAssetId(source, uri, transform.logger, null,
-          errorOnAbsolute: errorOnAbsolute);
+        var assetId = uriToAssetId(source, uri, transform.logger, null,
+            errorOnAbsolute: errorOnAbsolute);
         expect(assetId, result);
       });
       var messages = [];
       if (message != null) messages.add(message);
 
-      return applyTransformers(
-            [[transformer]],
-            inputs: {
-              source.toString(): ''
-            },
-            messages: messages);
+      return applyTransformers([[transformer]],
+          inputs: {source.toString(): ''}, messages: messages);
     });
   }
 
@@ -67,9 +61,9 @@ main() {
         source: new AssetId('a', 'lib/index.html'),
         uri: 'packages/foo/bar',
         message: 'warning: Invalid URL to reach to another package: '
-            'packages/foo/bar. Path reaching to other packages must first '
-            'reach up all the way to the packages directory. For example, try '
-            'changing the URL to: ../../packages/foo/bar');
+        'packages/foo/bar. Path reaching to other packages must first '
+        'reach up all the way to the packages directory. For example, try '
+        'changing the URL to: ../../packages/foo/bar');
 
     testAssetUri('allows relative packages from non-dart lib files',
         source: new AssetId('a', 'lib/index.html'),
@@ -84,8 +78,7 @@ main() {
     testAssetUri('does not allow absolute /packages by default',
         source: new AssetId('a', 'lib/index.html'),
         uri: '/packages/foo/bar.dart',
-        message:
-            'warning: absolute paths not allowed: "/packages/foo/bar.dart"');
+        message: 'warning: absolute paths not allowed: "/packages/foo/bar.dart"');
 
     testAssetUri('can suppress error on absolute /packages ',
         source: new AssetId('a', 'lib/index.html'),
