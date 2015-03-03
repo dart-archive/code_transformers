@@ -237,7 +237,8 @@ class ResolverImpl implements Resolver {
   Uri _getSourceUri(Element element, {AssetId from}) {
     var source = element.source;
     if (source is _AssetBasedSource) {
-      return source.getSourceUri(from);
+      var uriString = assetIdToUri(source.assetId, from: from);
+      return uriString != null ? Uri.parse(uriString) : null;
     } else if (source is UriAnnotatedSource) {
       return source.uri;
     }
@@ -407,25 +408,9 @@ class _AssetBasedSource extends Source {
       _getSourceFile(contents).span(node.offset, node.end);
   /// For logging errors.
   SourceFile _getSourceFile([String contents]) {
-    var uri = getSourceUri();
-    var path = uri != null ? uri.toString() : assetId.path;
+    var uri = assetIdToUri(assetId);
+    var path = uri != null ? uri : assetId.path;
     return new SourceFile(contents != null ? contents : rawContents, url: path);
-  }
-
-  /// Gets a URI which would be appropriate for importing this file.
-  ///
-  /// Note that this file may represent a non-importable file such as a part.
-  Uri getSourceUri([AssetId from]) {
-    if (!assetId.path.startsWith('lib/')) {
-      // Cannot do absolute imports of non lib-based assets.
-      if (from == null) return null;
-
-      if (assetId.package != from.package) return null;
-      return new Uri(
-          path: path.relative(assetId.path, from: path.dirname(from.path)));
-    }
-
-    return Uri.parse('package:${assetId.package}/${assetId.path.substring(4)}');
   }
 }
 

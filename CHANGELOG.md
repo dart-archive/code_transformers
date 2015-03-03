@@ -1,3 +1,7 @@
+## 0.2.6
+
+* Added `assetIdToUri` to assets.dart.
+
 ## 0.2.5
 * Improvements to `dartSdkDirectory` so it has a better chance of success.
 * `BuildLogger` now accepts `AggregateTransform` or `Transform`. If passing in

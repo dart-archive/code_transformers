@@ -68,8 +68,8 @@ https://github.com/dart-lang/code-transformers/blob/master/lib/src/resolver.dart
 
 ## Barback AssetIds and Uris
 
-This package also provides some helpers to create `AssetId`s from `Uri`s
+This package also provides some helpers to convert `AssetId`s to and from `Uri`s
 relative to a source asset.
 
-TODO(jakemac): Docs on this, see `uriToAssetId` in
+TODO(jakemac): Docs on this, see `uriToAssetId` & `assetIdToUri` in
 https://github.com/dart-lang/code-transformers/blob/master/lib/assets.dart
