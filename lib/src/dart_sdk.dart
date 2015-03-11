@@ -198,3 +198,57 @@ class _MockSdkSource implements UriAnnotatedSource {
   Uri resolveRelativeUri(Uri relativeUri) =>
       throw new UnsupportedError('not expecting relative urls in dart: mocks');
 }
+
+/// Sample mock SDK sources.
+final Map<String, String> mockSdkSources = {
+  // The list of types below is derived from types that are used internally by
+  // the resolver (see _initializeFrom in analyzer/src/generated/resolver.dart).
+  'dart:core': '''
+        library dart.core;
+
+        void print(Object o) {}
+
+        class Object {
+          String toString(){}
+        }
+        class Function {}
+        class StackTrace {}
+        class Symbol {}
+        class Type {}
+
+        class String {}
+        class bool {}
+        class num {
+          num operator +(num other) {}
+        }
+        class int extends num {
+          int operator-() {}
+        }
+        class double extends num {}
+        class DateTime {}
+        class Null {}
+
+        class Deprecated {
+          final String expires;
+          const Deprecated(this.expires);
+        }
+        const Object deprecated = const Deprecated("next release");
+        class _Override { const _Override(); }
+        const Object override = const _Override();
+        class _Proxy { const _Proxy(); }
+        const Object proxy = const _Proxy();
+
+        class Iterable<E> {}
+        class List<E> implements Iterable<E> {}
+        class Map<K, V> {}
+        ''',
+  'dart:async': '''
+        class Future<T> {
+          Future then(callback) {}
+        class Stream<T> {}
+  ''',
+  'dart:html': '''
+        library dart.html;
+        class HtmlElement {}
+        ''',
+};

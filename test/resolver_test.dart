@@ -12,14 +12,12 @@ import 'package:code_transformers/tests.dart';
 import 'package:unittest/compact_vm_config.dart';
 import 'package:unittest/unittest.dart';
 
+import 'package:code_transformers/src/dart_sdk.dart' show mockSdkSources;
+
 main() {
   useCompactVMConfiguration();
   group('mock sdk', () {
-    resolverTests(new Resolvers.fromMock({
-      'dart:core': 'library dart.core;\nclass Object {}',
-      'dart:async': 'library dart.async;',
-      'dart:html': 'library dart.html;',
-    }));
+    resolverTests(new Resolvers.fromMock(mockSdkSources));
   });
 
   group('real sdk', () {
@@ -131,12 +129,13 @@ resolverTests(Resolvers resolvers) {
     });
 
     test('should update on changed package imports', () {
+      // TODO(sigmund): remove modification below, see dartbug.com/22638
       return validateResolver(inputs: {
         'a|web/main.dart': '''
               import 'package:b/missing.dart';
 
               main() {
-              } ''',
+              } // modified, but we shouldn't need to! ''',
         'b|lib/missing.dart': '''
               library b;
               class Bar {}
