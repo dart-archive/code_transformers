@@ -69,6 +69,8 @@ class DartSourceProxy implements UriAnnotatedSource {
   /// Underlying source object.
   final Source _proxy;
 
+  Source get source => this;
+
   DartSourceProxy(this._proxy, this.uri);
 
   /// Ensures that [source] is a DartSourceProxy.
@@ -170,6 +172,8 @@ class _MockSdkSource implements UriAnnotatedSource {
   /// Absolute URI which this source can be imported from.
   final Uri uri;
   final String _contents;
+
+  Source get source => this;
 
   _MockSdkSource(this.uri, this._contents);
 

@@ -1,3 +1,11 @@
+## 0.2.7+1
+
+* Fixes for missing overrides after upgrade to analzyer 0.24.0
+
+## 0.2.7
+
+* Added default set of mockSdkSources and upgraded to analyzer 0.24.0
+
 ## 0.2.6
 
 * Added `assetIdToUri` to assets.dart.
