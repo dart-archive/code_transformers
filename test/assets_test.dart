@@ -39,6 +39,9 @@ void assetIdToUriTests() {
   testAssetIdToUri('resolves relative URIs', new AssetId('a', 'web/main.dart'),
       result: 'main.dart', from: new AssetId('a', 'web/foo.dart'));
 
+  testAssetIdToUri('resolves relative URIs in subfolders', new AssetId('a', 'web/foo/main.dart'),
+      result: 'foo/main.dart', from: new AssetId('a', 'web/foo.dart'));
+
   testAssetIdToUri('resolves package: URIs', new AssetId('foo', 'lib/foo.dart'),
       result: 'package:foo/foo.dart');
 

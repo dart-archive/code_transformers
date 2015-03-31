@@ -1,3 +1,8 @@
+## 0.2.7+2
+
+* Fix `assetIdToUri` on windows,
+[41](https://github.com/dart-lang/polymer-dart/issues/41)
+
 ## 0.2.7+1
 
 * Fixes for missing overrides after upgrade to analzyer 0.24.0

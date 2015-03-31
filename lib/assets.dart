@@ -140,7 +140,7 @@ String assetIdToUri(AssetId assetId,
       return null;
     }
     return new Uri(
-            path: path.relative(assetId.path, from: path.dirname(from.path)))
+            path: path.url.relative(assetId.path, from: path.url.dirname(from.path)))
         .toString();
   }
 
