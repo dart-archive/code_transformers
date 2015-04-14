@@ -1,3 +1,8 @@
+## 0.2.8
+
+* Add `benchmarks.dart` file which exposes a `TransformerBenchmark`. This can be
+used to implement simple benchmarks of transformer code.
+
 ## 0.2.7+2
 
 * Fix `assetIdToUri` on windows,
