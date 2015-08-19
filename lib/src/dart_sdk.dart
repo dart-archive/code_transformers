@@ -46,7 +46,7 @@ class DartUriResolverProxy implements DartUriResolver {
   DartUriResolverProxy(DartSdk sdk) : _proxy = new DartUriResolver(sdk);
 
   Source resolveAbsolute(Uri uri, [Uri actualUri]) =>
-      DartSourceProxy.wrap(_proxy.resolveAbsolute(uri), uri);
+      DartSourceProxy.wrap(_proxy.resolveAbsolute(uri, actualUri), uri);
 
   DartSdk get dartSdk => _proxy.dartSdk;
 
