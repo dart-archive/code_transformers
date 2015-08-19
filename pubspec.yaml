@@ -6,7 +6,7 @@ homepage: https://github.com/dart-lang/code-transformers
 environment:
   sdk: '>=1.0.0 <2.0.0'
 dependencies:
-  analyzer: '>=0.25.0 <0.27.0'
+  analyzer: '>=0.15.6 <0.27.0'
   barback: '>=0.14.2 <0.16.0'
   cli_util: '>=0.0.1 <0.1.0'
   path: '>=0.9.0 <2.0.0'
