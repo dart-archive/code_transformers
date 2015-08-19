@@ -1,16 +1,16 @@
 name: code_transformers
-version: 0.2.9
-author: "Dart Team <misc@dartlang.org>"
+version: 0.2.9+1
+author: Dart Team <misc@dartlang.org>
 description: Collection of utilities related to creating barback transformers.
 homepage: https://github.com/dart-lang/code-transformers
-dependencies:
-  analyzer: ">=0.15.6 <0.26.0"
-  barback: ">=0.14.2 <0.16.0"
-  cli_util: ">=0.0.1 <0.1.0"
-  path: ">=0.9.0 <2.0.0"
-  source_maps: ">=0.9.4 <0.11.0"
-  source_span: ">=1.0.0 <2.0.0"
-dev_dependencies:
-  unittest: ">=0.10.1 <0.12.0"
 environment:
-  sdk: ">=1.0.0 <2.0.0"
+  sdk: '>=1.0.0 <2.0.0'
+dependencies:
+  analyzer: '>=0.15.6 <0.27.0'
+  barback: '>=0.14.2 <0.16.0'
+  cli_util: '>=0.0.1 <0.1.0'
+  path: '>=0.9.0 <2.0.0'
+  source_maps: '>=0.9.4 <0.11.0'
+  source_span: '>=1.0.0 <2.0.0'
+dev_dependencies:
+  unittest: '>=0.10.1 <0.12.0'

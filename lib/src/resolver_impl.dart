@@ -31,8 +31,8 @@ final path = native_path.url;
 /// with the resolved AST.
 class ResolverImpl implements Resolver {
   /// Cache of all asset sources currently referenced.
-  final Map<AssetId, _AssetBasedSource> sources = <AssetId, _AssetBasedSource>{
-  };
+  final Map<AssetId, _AssetBasedSource> sources =
+      <AssetId, _AssetBasedSource>{};
 
   final InternalAnalysisContext _context =
       AnalysisEngine.instance.createAnalysisContext();
@@ -406,6 +406,7 @@ class _AssetBasedSource extends Source {
   /// For logging errors.
   SourceSpan _getSpan(AstNode node, [String contents]) =>
       _getSourceFile(contents).span(node.offset, node.end);
+
   /// For logging errors.
   SourceFile _getSourceFile([String contents]) {
     var uri = assetIdToUri(assetId);
@@ -419,7 +420,7 @@ class _AssetUriResolver implements UriResolver {
   final ResolverImpl _resolver;
   _AssetUriResolver(this._resolver);
 
-  Source resolveAbsolute(Uri uri) {
+  Source resolveAbsolute(Uri uri, [Uri actualUri]) {
     assert(uri.scheme != 'dart');
     var assetId;
     if (uri.scheme == 'asset') {

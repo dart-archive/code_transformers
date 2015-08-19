@@ -1,3 +1,7 @@
+## 0.2.9+1
+
+* Update to analyzer '<0.27.0'
+
 ## 0.2.9
 
 * Update to analyzer `<=0.26.0`.
