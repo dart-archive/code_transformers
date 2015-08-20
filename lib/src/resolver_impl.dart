@@ -420,7 +420,7 @@ class _AssetUriResolver implements UriResolver {
   final ResolverImpl _resolver;
   _AssetUriResolver(this._resolver);
 
-  Source resolveAbsolute(Uri uri, [Uri actualUri]) {
+  Source resolveAbsolute(Uri uri) {
     assert(uri.scheme != 'dart');
     var assetId;
     if (uri.scheme == 'asset') {

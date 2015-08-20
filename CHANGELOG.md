@@ -1,6 +1,10 @@
+## 0.2.9+3
+
+* Republish of 0.2.9 to ensure nobody gets 0.2.9+1 in the future.
+
 ## 0.2.9+2
 
-* * Update to analyzer '>=0.26.0 <0.27.0'
+* Update to analyzer '>=0.26.0 <0.27.0'
 
 ## 0.2.9+1
 
