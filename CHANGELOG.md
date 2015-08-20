@@ -1,6 +1,11 @@
+## 0.2.9+2
+
+* * Update to analyzer '>=0.26.0 <0.27.0'
+
 ## 0.2.9+1
 
 * Update to analyzer '<0.27.0'
+* This version will be reverted as it wasn't compatible with <0.26.0.
 
 ## 0.2.9
 
