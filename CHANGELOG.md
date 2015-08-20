@@ -1,3 +1,7 @@
+## 0.2.9+4
+
+* Republish 0.2.9+2 under new version.
+
 ## 0.2.9+3
 
 * Republish of 0.2.9 to ensure nobody gets 0.2.9+1 in the future.
