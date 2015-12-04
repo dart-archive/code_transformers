@@ -9,13 +9,11 @@ import 'dart:async';
 import 'package:barback/barback.dart';
 import 'package:code_transformers/resolver.dart';
 import 'package:code_transformers/tests.dart';
-import 'package:unittest/compact_vm_config.dart';
-import 'package:unittest/unittest.dart';
+import 'package:test/test.dart';
 
 import 'package:code_transformers/src/dart_sdk.dart' show mockSdkSources;
 
 main() {
-  useCompactVMConfiguration();
   group('mock sdk', () {
     resolverTests(new Resolvers.fromMock(mockSdkSources));
   });

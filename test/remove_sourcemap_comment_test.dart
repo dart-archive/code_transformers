@@ -7,7 +7,6 @@ library code_transformers.test.remove_sourcemap_comment_test;
 import 'package:barback/barback.dart';
 import 'package:code_transformers/src/remove_sourcemap_comment.dart';
 import 'package:code_transformers/tests.dart';
-import 'package:unittest/compact_vm_config.dart';
 
 final phases = [
   [
@@ -17,8 +16,6 @@ final phases = [
 ];
 
 void main() {
-  useCompactVMConfiguration();
-
   testPhases('removes sourcemap comments', phases, {
     'a|web/test.js': '''
           var i = 0;

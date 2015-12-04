@@ -5,12 +5,9 @@ library code_transformers.test.benchmarks_test;
 
 import 'package:barback/barback.dart';
 import 'package:code_transformers/benchmarks.dart';
-import 'package:unittest/compact_vm_config.dart';
-import 'package:unittest/unittest.dart';
+import 'package:test/test.dart';
 
 main() {
-  useCompactVMConfiguration();
-
   test('can benchmark transformers', () {
     var transformer = new TestTransformer();
     var transformers = [[transformer]];

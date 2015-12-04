@@ -6,7 +6,7 @@
 library polymer.test.build.messages_test;
 
 import 'dart:convert';
-import 'package:unittest/unittest.dart';
+import 'package:test/test.dart';
 import 'package:code_transformers/messages/messages.dart';
 import 'package:source_span/source_span.dart';
 

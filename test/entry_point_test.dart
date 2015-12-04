@@ -9,12 +9,9 @@ import 'dart:async';
 import 'package:barback/barback.dart';
 import 'package:code_transformers/resolver.dart';
 import 'package:code_transformers/tests.dart';
-import 'package:unittest/compact_vm_config.dart';
-import 'package:unittest/unittest.dart';
+import 'package:test/test.dart';
 
 main() {
-  useCompactVMConfiguration();
-
   Future checkDartEntry({Map<String, String> inputs, bool expectation}) {
     var transformer = new Validator((transform) {
       return isPossibleDartEntry(transform.primaryInput).then((value) {

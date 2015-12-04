@@ -9,7 +9,7 @@ import 'dart:async';
 
 import 'package:barback/barback.dart';
 import 'package:stack_trace/stack_trace.dart';
-import 'package:unittest/unittest.dart';
+import 'package:test/test.dart';
 
 String idToString(AssetId id) => '${id.package}|${id.path}';
 AssetId idFromString(String s) {
