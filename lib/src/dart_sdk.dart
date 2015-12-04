@@ -6,7 +6,10 @@ library code_transformers.src.dart_sdk;
 
 import 'dart:io' show Directory;
 
-import 'package:analyzer/src/generated/engine.dart';
+/// Note that the Analyzer has two versions of SdkAnalysisContext (and lots of
+/// other classes) with different signatures: can't mix the two.
+import 'package:analyzer/src/generated/engine.dart' show InternalAnalysisContext, TimestampedData;
+import 'package:analyzer/src/context/context.dart' show SdkAnalysisContext;
 import 'package:analyzer/src/generated/java_io.dart';
 import 'package:analyzer/src/generated/sdk.dart';
 import 'package:analyzer/src/generated/sdk_io.dart' show DirectoryBasedDartSdk;
@@ -125,7 +128,7 @@ class MockDartSdk implements DartSdk {
   final Map<String, SdkLibrary> _libs = {};
   final String sdkVersion = '0';
   List<String> get uris => _sources.keys.map((uri) => '$uri').toList();
-  final AnalysisContext context = new SdkAnalysisContext();
+  final InternalAnalysisContext context = new SdkAnalysisContext();
   DartUriResolver _resolver;
   DartUriResolver get resolver => _resolver;
 
