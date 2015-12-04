@@ -9,12 +9,9 @@ import 'dart:async';
 import 'package:barback/barback.dart';
 import 'package:code_transformers/assets.dart';
 import 'package:code_transformers/tests.dart';
-import 'package:unittest/compact_vm_config.dart';
-import 'package:unittest/unittest.dart';
+import 'package:test/test.dart';
 
 main() {
-  useCompactVMConfiguration();
-
   group('uriToAssetId', uriToAssetIdTests);
   group('assetIdToUri', assetIdToUriTests);
 }

@@ -11,7 +11,7 @@ import 'dart:io' show Platform;
 
 import 'package:barback/barback.dart' show Transformer;
 import 'package:path/path.dart' as path;
-import 'package:unittest/unittest.dart';
+import 'package:test/test.dart';
 
 import 'src/test_harness.dart';
 import 'src/dart_sdk.dart';
