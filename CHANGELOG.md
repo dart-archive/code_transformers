@@ -1,3 +1,7 @@
+## 0.2.10
+
+* Update to use the `test` package instead of the `unittest` package.
+
 ## 0.2.9+4
 
 * Republish 0.2.9+2 under new version.
