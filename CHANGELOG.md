@@ -1,7 +1,10 @@
+## 0.3.0+1
+
+* Upgrade `test` to a real dependency.
+
 ## 0.3.0
 
-* Re-release `0.2.10` release as `0.3.0`. The test package is now a regular
-  dependency.
+* Re-release `0.2.10` release as `0.3.0`.
 
 ## 0.2.11
 
