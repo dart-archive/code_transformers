@@ -1,3 +1,13 @@
+## 0.3.0
+
+* Re-release `0.2.10` release as `0.3.0`. The test package is now a regular
+  dependency.
+
+## 0.2.11
+
+* Revert `0.2.10` release, will be re-released as `0.3.0` since it is actually
+  a breaking change.
+
 ## 0.2.10
 
 * Update to use the `test` package instead of the `unittest` package.
