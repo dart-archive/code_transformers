@@ -9,6 +9,7 @@ import 'package:barback/barback.dart';
 
 import 'package:analyzer/src/generated/engine.dart' show AnalysisOptions;
 import 'package:analyzer/src/generated/sdk.dart' show DartSdk;
+import 'package:analyzer/src/generated/engine.dart';
 import 'package:analyzer/src/generated/source.dart' show DartUriResolver;
 
 import 'entry_point.dart';
@@ -33,6 +34,7 @@ class Resolvers {
   Resolvers.fromSdk(this.dartSdk, this.dartUriResolver, {this.options});
 
   factory Resolvers(dartSdkDirectory, {AnalysisOptions options}) {
+    _initAnalysisEngine();
     var sdk = new DirectoryBasedDartSdkProxy(dartSdkDirectory);
     var uriResolver = new DartUriResolverProxy(sdk);
     return new Resolvers.fromSdk(sdk, uriResolver, options: options);
@@ -40,6 +42,7 @@ class Resolvers {
 
   factory Resolvers.fromMock(Map<String, String> sources,
       {bool reportMissing: false, AnalysisOptions options}) {
+    _initAnalysisEngine();
     var sdk = new MockDartSdk(sources, reportMissing: reportMissing);
     return new Resolvers.fromSdk(sdk, sdk.resolver, options: options);
   }
@@ -119,4 +122,11 @@ abstract class ResolverTransformer implements Transformer {
   ///
   /// Return a Future to indicate when apply is completed.
   applyResolver(Transform transform, Resolver resolver);
+}
+
+bool _analysisEngineInitialized = false;
+_initAnalysisEngine() {
+  if (_analysisEngineInitialized) return;
+  _analysisEngineInitialized = true;
+  AnalysisEngine.instance.processRequiredPlugins();
 }

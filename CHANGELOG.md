@@ -1,3 +1,7 @@
+## 0.3.1
+
+* Update to analyzer `>=0.27.0 <0.28.0`.
+
 ## 0.3.0+1
 
 * Upgrade `test` to a real dependency.
