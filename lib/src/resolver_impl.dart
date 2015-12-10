@@ -255,7 +255,8 @@ class ResolverImpl implements Resolver {
   SourceSpan getSourceSpan(Element element) {
     var sourceFile = getSourceFile(element);
     if (sourceFile == null) return null;
-    return sourceFile.span(element.node.offset, element.node.end);
+    return sourceFile.span(
+        element.computeNode().offset, element.computeNode().end);
   }
 
   TextEditTransaction createTextEditTransaction(Element element) {
@@ -289,7 +290,6 @@ class ResolverImpl implements Resolver {
 
 /// Implementation of Analyzer's Source for Barback based assets.
 class _AssetBasedSource extends Source {
-
   /// Asset ID where this source can be found.
   final AssetId assetId;
 
