@@ -8,7 +8,7 @@ import 'dart:async';
 
 import 'package:barback/barback.dart';
 import 'package:code_transformers/assets.dart';
-import 'package:code_transformers/tests.dart';
+import 'package:transformer_test/utils.dart';
 import 'package:test/test.dart';
 
 main() {

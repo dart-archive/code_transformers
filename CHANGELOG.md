@@ -1,3 +1,8 @@
+## 0.4.0
+
+* Remove dependency on `test`, and move all test related apis to a new
+  `transformer_test` package which is now a dev dependency.
+
 ## 0.3.1
 
 * Update to analyzer `>=0.27.0 <0.28.0`.
