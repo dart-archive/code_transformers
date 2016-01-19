@@ -6,7 +6,7 @@ library code_transformers.test.remove_sourcemap_comment_test;
 
 import 'package:barback/barback.dart';
 import 'package:code_transformers/src/remove_sourcemap_comment.dart';
-import 'package:code_transformers/tests.dart';
+import 'package:transformer_test/transformer_test.dart';
 
 final phases = [
   [
