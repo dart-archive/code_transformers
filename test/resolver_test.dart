@@ -8,7 +8,7 @@ import 'dart:async';
 
 import 'package:barback/barback.dart';
 import 'package:code_transformers/resolver.dart';
-import 'package:transformer_test/transformer_test.dart';
+import 'package:transformer_test/utils.dart';
 import 'package:test/test.dart';
 
 import 'package:code_transformers/src/dart_sdk.dart' show mockSdkSources;
