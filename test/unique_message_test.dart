@@ -3,6 +3,7 @@
 // BSD-style license that can be found in the LICENSE file.
 
 /// Tests for some of the utility helper functions used by the compiler.
+@TestOn('vm')
 library polymer.test.build.messages_test;
 
 import 'dart:mirrors';
