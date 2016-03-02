@@ -257,6 +257,28 @@ resolverTests(Resolvers resolvers) {
       });
     });
 
+    test('should resolve constants in transitive imports', () {
+      return validateResolver(inputs: {
+        'a|web/main.dart': '''
+              library web.main;
+
+              import 'package:a/a.dart';
+              class Foo extends Bar {}
+              ''',
+        'a|lib/a.dart': '''
+              library a.a;
+
+              const int annotation = 0;
+              @annotation
+              class Bar {}''',
+      }, validator: (Resolver resolver) {
+        var main = resolver.getLibraryByName('web.main');
+        var meta = main.unit.declarations[0].element.supertype.element.metadata[0];
+        expect(meta, isNotNull);
+        expect(meta.constantValue, 0);
+      });
+    });
+
     test('deleted files should be removed', () {
       return validateResolver(
           inputs: {
