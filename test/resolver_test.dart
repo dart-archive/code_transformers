@@ -263,6 +263,8 @@ resolverTests(Resolvers resolvers) {
               library web.main;
 
               import 'package:a/a.dart';
+              export 'package:a/a.dart';
+
               class Foo extends Bar {}
               ''',
         'a|lib/a.dart': '''
@@ -271,11 +273,12 @@ resolverTests(Resolvers resolvers) {
               const int annotation = 0;
               @annotation
               class Bar {}''',
-      }, validator: (Resolver resolver) {
+      }, validator: (resolver) {
         var main = resolver.getLibraryByName('web.main');
-        var meta = main.unit.declarations[0].element.supertype.element.metadata[0];
+        var meta =
+            main.unit.declarations[0].element.supertype.element.metadata[0];
         expect(meta, isNotNull);
-        expect(meta.constantValue, 0);
+        expect(meta.constantValue, isNotNull);
       });
     });
 
