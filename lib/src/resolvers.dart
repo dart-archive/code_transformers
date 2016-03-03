@@ -10,7 +10,8 @@ import 'package:barback/barback.dart';
 import 'package:analyzer/src/generated/engine.dart' show AnalysisOptions;
 import 'package:analyzer/src/generated/sdk.dart' show DartSdk;
 import 'package:analyzer/src/generated/engine.dart';
-import 'package:analyzer/src/generated/source.dart' show DartUriResolver;
+import 'package:analyzer/src/generated/source.dart'
+    show DartUriResolver, Source;
 
 import 'entry_point.dart';
 import 'resolver.dart';
@@ -31,20 +32,34 @@ class Resolvers {
   final DartUriResolver dartUriResolver;
   final AnalysisOptions options;
 
-  Resolvers.fromSdk(this.dartSdk, this.dartUriResolver, {this.options});
+  /// Null unless `useSharedSources` is true. This option should only be used if
+  /// you know that files are always in a consistent state wherever this
+  /// resolvers object is used. Any time that [Resolvers#get] or
+  /// [Resolver#resolve] are called it will update the sources globally when
+  /// this option is in use.
+  final Map<AssetId, dynamic> sharedSources;
 
-  factory Resolvers(dartSdkDirectory, {AnalysisOptions options}) {
+  Resolvers.fromSdk(this.dartSdk, this.dartUriResolver,
+      {this.options, bool useSharedSources})
+      : sharedSources = useSharedSources == true ? <AssetId, dynamic>{} : null;
+
+  factory Resolvers(dartSdkDirectory,
+      {AnalysisOptions options, bool useSharedSources}) {
     _initAnalysisEngine();
     var sdk = new DirectoryBasedDartSdkProxy(dartSdkDirectory);
     var uriResolver = new DartUriResolverProxy(sdk);
-    return new Resolvers.fromSdk(sdk, uriResolver, options: options);
+    return new Resolvers.fromSdk(sdk, uriResolver,
+        options: options, useSharedSources: useSharedSources);
   }
 
   factory Resolvers.fromMock(Map<String, String> sources,
-      {bool reportMissing: false, AnalysisOptions options}) {
+      {bool reportMissing: false,
+      AnalysisOptions options,
+      bool useSharedSources}) {
     _initAnalysisEngine();
     var sdk = new MockDartSdk(sources, reportMissing: reportMissing);
-    return new Resolvers.fromSdk(sdk, sdk.resolver, options: options);
+    return new Resolvers.fromSdk(sdk, sdk.resolver,
+        options: options, useSharedSources: useSharedSources);
   }
 
   /// Get a resolver for [transform]. If provided, this resolves the code
@@ -57,7 +72,9 @@ class Resolvers {
   Future<Resolver> get(Transform transform, [List<AssetId> entryPoints]) {
     var id = transform.primaryInput.id;
     var resolver = _resolvers.putIfAbsent(
-        id, () => new ResolverImpl(dartSdk, dartUriResolver, options: options));
+        id,
+        () => new ResolverImpl(dartSdk, dartUriResolver,
+            options: options, sources: sharedSources));
     return resolver.resolve(transform, entryPoints);
   }
 }
@@ -98,8 +115,8 @@ abstract class ResolverTransformer implements Transformer {
   /// to run the resolver on.
   Future apply(Transform transform) =>
       shouldApplyResolver(transform.primaryInput).then((result) {
-    if (result) return applyToEntryPoints(transform);
-  });
+        if (result) return applyToEntryPoints(transform);
+      });
 
   /// Helper function to make it easy to write an `Transformer.apply` method
   /// that automatically gets and releases the resolver. This is typically used
@@ -111,8 +128,8 @@ abstract class ResolverTransformer implements Transformer {
   ///    }
   Future applyToEntryPoints(Transform transform, [List<AssetId> entryPoints]) {
     return resolvers.get(transform, entryPoints).then((resolver) {
-      return new Future(() => applyResolver(transform, resolver)).whenComplete(
-          () {
+      return new Future(() => applyResolver(transform, resolver))
+          .whenComplete(() {
         resolver.release();
       });
     });
