@@ -69,13 +69,16 @@ class Resolvers {
   /// [Resolver.release] must be called once it's done being used, or
   /// [ResolverTransformer] should be used to automatically release the
   /// resolver.
-  Future<Resolver> get(Transform transform, [List<AssetId> entryPoints]) {
+  ///
+  /// See [Resolver#resolve] for more info on the `resolveAllLibraries` option.
+  Future<Resolver> get(Transform transform,
+      [List<AssetId> entryPoints, bool resolveAllLibraries]) {
     var id = transform.primaryInput.id;
     var resolver = _resolvers.putIfAbsent(
         id,
         () => new ResolverImpl(dartSdk, dartUriResolver,
             options: options, sources: sharedSources));
-    return resolver.resolve(transform, entryPoints);
+    return resolver.resolve(transform, entryPoints, resolveAllLibraries);
   }
 }
 
@@ -86,6 +89,9 @@ class Resolvers {
 abstract class ResolverTransformer implements Transformer {
   /// The cache of resolvers- must be set from subclass.
   Resolvers resolvers;
+
+  /// See [Resolver#resolve] for more info - can be overridden by a subclass.
+  bool get resolveAllLibraries => true;
 
   /// By default only process prossible entry point assets.
   ///
@@ -127,7 +133,9 @@ abstract class ResolverTransformer implements Transformer {
   ///       return applyToEntryPoints(transform, entryPoints);
   ///    }
   Future applyToEntryPoints(Transform transform, [List<AssetId> entryPoints]) {
-    return resolvers.get(transform, entryPoints).then((resolver) {
+    return resolvers
+        .get(transform, entryPoints, resolveAllLibraries)
+        .then((resolver) {
       return new Future(() => applyResolver(transform, resolver))
           .whenComplete(() {
         resolver.release();

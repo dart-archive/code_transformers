@@ -21,7 +21,15 @@ abstract class Resolver {
   ///
   /// [release] must be called when done handling this Resolver to allow it
   /// to be used by later phases.
-  Future<Resolver> resolve(Transform transform, [List<AssetId> entryPoints]);
+  ///
+  /// If [resolveAllLibraries] is [false], then transitive imports will not
+  /// be resolved. This will result in faster resolution, but you will need to
+  /// manually call something like
+  /// `libary.context.computeLibraryElement(library.definingCompilationUnit.source);`
+  /// for each [LibraryElement] that you want to ensure is fully resolved. The
+  /// default value is [true].
+  Future<Resolver> resolve(Transform transform,
+      [List<AssetId> entryPoints, bool resolveAllLibraries]);
 
   /// Release this resolver so it can be updated by following transforms.
   void release();

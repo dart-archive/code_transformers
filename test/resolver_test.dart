@@ -32,9 +32,9 @@ main() {
 resolverTests(Resolvers resolvers) {
   var entryPoint = new AssetId('a', 'web/main.dart');
   Future validateResolver({Map<String, String> inputs, validator(Resolver),
-      List<String> messages: const []}) {
+      List<String> messages: const [], bool resolveAllLibraries: true}) {
     return applyTransformers(
-        [[new TestTransformer(resolvers, entryPoint, validator)]],
+        [[new TestTransformer(resolvers, entryPoint, validator, resolveAllLibraries)]],
         inputs: inputs, messages: messages);
   }
 
@@ -257,19 +257,17 @@ resolverTests(Resolvers resolvers) {
       });
     });
 
-    test('should resolve constants in transitive imports', () {
+    test('should resolve constants in transitive imports by default', () {
       return validateResolver(inputs: {
         'a|web/main.dart': '''
               library web.main;
 
-              import 'package:a/a.dart';
-              export 'package:a/a.dart';
+              import 'package:a/do_resolve.dart';
+              export 'package:a/do_resolve.dart';
 
               class Foo extends Bar {}
               ''',
-        'a|lib/a.dart': '''
-              library a.a;
-
+        'a|lib/do_resolve.dart': '''
               const int annotation = 0;
               @annotation
               class Bar {}''',
@@ -279,6 +277,31 @@ resolverTests(Resolvers resolvers) {
             main.unit.declarations[0].element.supertype.element.metadata[0];
         expect(meta, isNotNull);
         expect(meta.constantValue, isNotNull);
+      });
+    });
+
+    test('can disable resolving of constants in transitive imports', () {
+      return validateResolver(resolveAllLibraries: false, inputs: {
+        'a|web/main.dart': '''
+              library web.main;
+
+              import 'package:a/dont_resolve.dart';
+              export 'package:a/dont_resolve.dart';
+
+              class Foo extends Bar {}
+              ''',
+        'a|lib/dont_resolve.dart': '''
+              library a.dont_resolve;
+
+              const int annotation = 0;
+              @annotation
+              class Bar {}''',
+      }, validator: (resolver) {
+        var main = resolver.getLibraryByName('web.main');
+        var meta =
+            main.unit.declarations[0].element.supertype.element.metadata[0];
+        expect(meta, isNotNull);
+        expect(meta.constantValue, isNull);
       });
     });
 
@@ -350,8 +373,11 @@ resolverTests(Resolvers resolvers) {
 class TestTransformer extends Transformer with ResolverTransformer {
   final AssetId primary;
   final Function validator;
+  final bool resolveAllLibraries;
 
-  TestTransformer(Resolvers resolvers, this.primary, this.validator) {
+  TestTransformer(
+    Resolvers resolvers, this.primary, this.validator,
+    this.resolveAllLibraries) {
     this.resolvers = resolvers;
   }
 
