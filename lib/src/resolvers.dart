@@ -37,11 +37,11 @@ class Resolvers {
   /// resolvers object is used. Any time that [Resolvers#get] or
   /// [Resolver#resolve] are called it will update the sources globally when
   /// this option is in use.
-  final Map<AssetId, Source> sources;
+  final Map<AssetId, dynamic> sharedSources;
 
   Resolvers.fromSdk(this.dartSdk, this.dartUriResolver,
       {this.options, bool useSharedSources})
-      : sources = useSharedSources == true ? <AssetId, Source>{} : null;
+      : sharedSources = useSharedSources == true ? <AssetId, dynamic>{} : null;
 
   factory Resolvers(dartSdkDirectory,
       {AnalysisOptions options, bool useSharedSources}) {
@@ -74,7 +74,7 @@ class Resolvers {
     var resolver = _resolvers.putIfAbsent(
         id,
         () => new ResolverImpl(dartSdk, dartUriResolver,
-            options: options, sources: sources));
+            options: options, sources: sharedSources));
     return resolver.resolve(transform, entryPoints);
   }
 }
