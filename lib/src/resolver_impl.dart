@@ -165,12 +165,17 @@ class ResolverImpl implements Resolver {
       if (resolveAllLibraries) {
         // Force resolve all other available libraries. As of analyzer > 0.27.1
         // this is necessary to get resolved constants.
+        var newLibraries = new Set<LibraryElement>();
         for (var library in libraries) {
-          if (library.source.uri.scheme == 'dart') continue;
-          if (_entryLibraries.contains(library)) continue;
-          _context
-              .computeLibraryElement(library.definingCompilationUnit.source);
+          if (library.source.uri.scheme == 'dart' ||
+              _entryLibraries.contains(library)) {
+            newLibraries.add(library);
+          } else {
+            newLibraries.add(_context
+                .computeLibraryElement(library.definingCompilationUnit.source));
+          }
         }
+        _libraries = newLibraries;
       }
     });
   }

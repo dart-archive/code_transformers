@@ -299,14 +299,23 @@ resolverTests(Resolvers resolvers) {
               class Foo extends Bar {}
               ''',
             'a|lib/do_resolve.dart': '''
+              library a.do_resolve;
+
               const int annotation = 0;
               @annotation
               class Bar {}''',
           },
           validator: (resolver) {
             var main = resolver.getLibraryByName('web.main');
+            // Navigate to the library via Element models
             var meta =
                 main.unit.declarations[0].element.supertype.element.metadata[0];
+            expect(meta, isNotNull);
+            expect(meta.constantValue, isNotNull);
+
+            // Get the library from the resolver directly
+            var lib = resolver.getLibraryByName('a.do_resolve');
+            meta = lib.unit.declarations[1].element.metadata[0];
             expect(meta, isNotNull);
             expect(meta.constantValue, isNotNull);
           });
