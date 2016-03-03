@@ -22,6 +22,11 @@ main() {
   group('real sdk', () {
     resolverTests(new Resolvers(testingDartSdkDirectory));
   });
+
+  group('shared sources', () {
+    resolverTests(
+      new Resolvers.fromMock(mockSdkSources, useSharedSources: true));
+  });
 }
 
 resolverTests(Resolvers resolvers) {

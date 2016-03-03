@@ -31,8 +31,7 @@ final path = native_path.url;
 /// with the resolved AST.
 class ResolverImpl implements Resolver {
   /// Cache of all asset sources currently referenced.
-  final Map<AssetId, _AssetBasedSource> sources =
-      <AssetId, _AssetBasedSource>{};
+  final Map<AssetId, _AssetBasedSource> sources;
 
   final InternalAnalysisContext _context =
       AnalysisEngine.instance.createAnalysisContext();
@@ -53,7 +52,8 @@ class ResolverImpl implements Resolver {
   /// Creates a resolver with a given [sdk] implementation for resolving
   /// `dart:*` imports.
   ResolverImpl(DartSdk sdk, DartUriResolver dartUriResolver,
-      {AnalysisOptions options}) {
+      {AnalysisOptions options, Map<AssetId, _AssetBasedSource> sources})
+      : sources = sources ?? <AssetId, _AssetBasedSource>{} {
     if (options == null) {
       options = new AnalysisOptionsImpl()
         ..cacheSize = 256 // # of sources to cache ASTs for.
