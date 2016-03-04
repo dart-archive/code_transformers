@@ -1,3 +1,7 @@
+## 0.4.1+1
+
+* Added better error handling around missing files during resolution.
+
 ## 0.4.1
 
 * Added a fix for [#24890](https://github.com/dart-lang/sdk/issues/24890).

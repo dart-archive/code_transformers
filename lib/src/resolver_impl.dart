@@ -118,24 +118,28 @@ class ResolverImpl implements Resolver {
     void processAsset(AssetId assetId) {
       visited.add(assetId);
 
-      visiting.add(transform.readInputAsString(assetId).then((contents) {
-        var source = sources[assetId];
-        if (source == null) {
-          source = new _AssetBasedSource(assetId, this);
-          sources[assetId] = source;
+      visiting.add(() async {
+        var exists = await transform.hasInput(assetId);
+        if (!exists) {
+          var source = sources[assetId];
+          if (source != null && source.exists()) {
+            _context.applyChanges(new ChangeSet()..removedSource(source));
+            sources[assetId].updateContents(null);
+          }
+        } else {
+          var contents = await transform.readInputAsString(assetId);
+          var source = sources[assetId];
+          if (source == null) {
+            source = new _AssetBasedSource(assetId, this);
+            sources[assetId] = source;
+          }
+          source.updateDependencies(contents);
+          toUpdate.add(new _PendingUpdate(source, contents));
+          source.dependentAssets
+              .where((id) => !visited.contains(id))
+              .forEach(processAsset);
         }
-        source.updateDependencies(contents);
-        toUpdate.add(new _PendingUpdate(source, contents));
-        source.dependentAssets
-            .where((id) => !visited.contains(id))
-            .forEach(processAsset);
-      }, onError: (e) {
-        var source = sources[assetId];
-        if (source != null && source.exists()) {
-          _context.applyChanges(new ChangeSet()..removedSource(source));
-          sources[assetId].updateContents(null);
-        }
-      }));
+      }());
     }
     entryPoints.forEach(processAsset);
 
