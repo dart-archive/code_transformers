@@ -71,14 +71,17 @@ class ResolverImpl implements Resolver {
     return source == null ? null : _context.computeLibraryElement(source);
   }
 
-  Future<Resolver> resolve(Transform transform, [List<AssetId> entryPoints]) {
+  Future<Resolver> resolve(Transform transform,
+      [List<AssetId> entryPoints, bool resolveAllLibraries]) {
     // Can only have one resolve in progress at a time, so chain the current
     // resolution to be after the last one.
     var phaseComplete = new Completer();
     var future = _lastPhaseComplete.whenComplete(() {
       _currentPhaseComplete = phaseComplete;
-      return _performResolve(transform,
-          entryPoints == null ? [transform.primaryInput.id] : entryPoints);
+      return _performResolve(
+          transform,
+          entryPoints == null ? [transform.primaryInput.id] : entryPoints,
+          resolveAllLibraries);
     }).then((_) => this);
     // Advance the lastPhaseComplete to be done when this phase is all done.
     _lastPhaseComplete = phaseComplete.future;
@@ -98,7 +101,9 @@ class ResolverImpl implements Resolver {
     _currentTransform = null;
   }
 
-  Future _performResolve(Transform transform, List<AssetId> entryPoints) {
+  Future _performResolve(Transform transform, List<AssetId> entryPoints,
+      bool resolveAllLibraries) {
+    resolveAllLibraries ??= true;
     if (_currentTransform != null) {
       throw new StateError('Cannot be accessed by concurrent transforms');
     }
@@ -156,6 +161,22 @@ class ResolverImpl implements Resolver {
         if (source == null) return null;
         return _context.computeLibraryElement(source);
       }).toList();
+
+      if (resolveAllLibraries) {
+        // Force resolve all other available libraries. As of analyzer > 0.27.1
+        // this is necessary to get resolved constants.
+        var newLibraries = new Set<LibraryElement>();
+        for (var library in libraries) {
+          if (library.source.uri.scheme == 'dart' ||
+              _entryLibraries.contains(library)) {
+            newLibraries.add(library);
+          } else {
+            newLibraries.add(_context
+                .computeLibraryElement(library.definingCompilationUnit.source));
+          }
+        }
+        _libraries = newLibraries;
+      }
     });
   }
 
