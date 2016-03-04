@@ -1,3 +1,19 @@
+## 0.4.1
+
+* Added a fix for [#24890](https://github.com/dart-lang/sdk/issues/24890).
+  * All constants in all libraries will once again be resolved by default.
+  * Added a new `resolveAllLibraries` option to `Resolver#resolve` and
+    `Resolvers#get`. If `false` is passed then constants will not be resolved in
+    non entry points. This saves significant time if constants are not needed.
+* Added a `useSharedSources` option to `Resolvers`. This gives a significant
+  speed increase, but must be used carefully.
+  * If used, then all `Resolver` instances created from the same `Resolvers`
+    instance will share the same sources cache.
+  * This should be generally safe to use if the `Resolvers` instance is created
+    in the constructor of your `Transformer`.
+  * This option should probably not be used with a static or shared `Resolvers`
+    instance.
+
 ## 0.4.0
 
 * Remove dependency on `test`, and move all test related apis to a new
