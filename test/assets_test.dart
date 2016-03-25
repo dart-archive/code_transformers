@@ -25,7 +25,7 @@ void assetIdToUriTests() {
             logger: transform.logger, span: null, from: from);
         expect(uriOut, result);
       });
-      var messages = [];
+      var messages = <String>[];
       if (message != null) messages.add(message);
 
       return applyTransformers([[transformer]],
@@ -76,7 +76,7 @@ void uriToAssetIdTests() {
             errorOnAbsolute: errorOnAbsolute);
         expect(assetId, result);
       });
-      var messages = [];
+      var messages = <String>[];
       if (message != null) messages.add(message);
 
       return applyTransformers([[transformer]],

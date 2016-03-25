@@ -59,7 +59,7 @@ class BuildLogger implements TransformLogger {
 
   /// Records a message at the fine level. If [msg] is a [Message] it is
   /// recorded directly, otherwise it is first converted to a [String].
-  void fine(msg, {AssetId asset, SourceSpan span}) {
+  void fine(Object msg, {AssetId asset, SourceSpan span}) {
     msg = msg is Message ? msg : new Message.unknown('$msg');
     _transform.logger.fine(_snippet(msg), asset: asset, span: span);
     _logs.add(new BuildLogEntry(msg, span, LogLevel.FINE.name));
@@ -67,7 +67,7 @@ class BuildLogger implements TransformLogger {
 
   /// Records a message at the info level. If [msg] is a [Message] it is
   /// recorded directly, otherwise it is first converted to a [String].
-  void info(msg, {AssetId asset, SourceSpan span}) {
+  void info(Object msg, {AssetId asset, SourceSpan span}) {
     msg = msg is Message ? msg : new Message.unknown('$msg');
     _transform.logger.info(_snippet(msg), asset: asset, span: span);
     _logs.add(new BuildLogEntry(msg, span, LogLevel.INFO.name));
@@ -75,7 +75,7 @@ class BuildLogger implements TransformLogger {
 
   /// Records a warning message. If [msg] is a [Message] it is recorded
   /// directly, otherwise it is first converted to a [String].
-  void warning(msg, {AssetId asset, SourceSpan span}) {
+  void warning(Object msg, {AssetId asset, SourceSpan span}) {
     msg = msg is Message ? msg : new Message.unknown('$msg');
     _transform.logger.warning(_snippet(msg), asset: asset, span: span);
     _logs.add(new BuildLogEntry(msg, span, LogLevel.WARNING.name));
@@ -83,7 +83,7 @@ class BuildLogger implements TransformLogger {
 
   /// Records an error message. If [msg] is a [Message] it is recorded
   /// directly, otherwise it is first converted to a [String].
-  void error(msg, {AssetId asset, SourceSpan span}) {
+  void error(Object msg, {AssetId asset, SourceSpan span}) {
     msg = msg is Message ? msg : new Message.unknown('$msg');
     if (convertErrorsToWarnings) {
       _transform.logger.warning(_snippet(msg), asset: asset, span: span);
@@ -110,12 +110,11 @@ class BuildLogger implements TransformLogger {
 
   // Each phase outputs a new log file with an incrementing # appended, this
   // figures out the next # to use.
-  Future<AssetId> _getNextLogAssetId([int nextNumber = 1]) {
+  Future<AssetId> _getNextLogAssetId([int nextNumber = 1]) async {
     var nextAssetPath = _primaryId.addExtension('${LOG_EXTENSION}.$nextNumber');
-    return _transform.hasInput(nextAssetPath).then((exists) {
-      if (!exists) return nextAssetPath;
-      return _getNextLogAssetId(++nextNumber);
-    });
+    bool exists = await _transform.hasInput(nextAssetPath);
+    if (!exists) return nextAssetPath;
+    return _getNextLogAssetId(++nextNumber);
   }
 
   // Reads all log files for an Asset into [logs].

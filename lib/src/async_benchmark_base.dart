@@ -54,18 +54,16 @@ class AsyncBenchmarkBase {
   }
 
   // Measures the average time to call `run` once and returns it.
-  Future<double> measure({int iterations: 10}) {
+  Future<double> measure({int iterations: 10}) async {
     // Unmeasured setup code.
-    return setup().then((_) {
-      // Warmup for at least 100ms. Discard result.
-      return measureFor(() => warmup(), 100);
-    }).then((_) {
-      // Run the benchmark for at least 2000ms.
-      return measureFor(() => exercise(iterations: iterations), 2000);
-    }).then((result) {
-      // Tear down the test (unmeasured) and return the result divided by the
-      // number of iterations.
-      return teardown().then((_) => result / iterations);
-    });
+    await setup();
+    // Warmup for at least 100ms. Discard result.
+    await measureFor(() => warmup(), 100);
+    // Run the benchmark for at least 2000ms.
+    var result = await measureFor(() => exercise(iterations: iterations), 2000);
+    // Tear down the test (unmeasured) and return the result divided by the
+    // number of iterations.
+    await teardown();
+    return result / iterations;
   }
 }

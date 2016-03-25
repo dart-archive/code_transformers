@@ -31,7 +31,7 @@ final path = native_path.url;
 /// with the resolved AST.
 class ResolverImpl implements Resolver {
   /// Cache of all asset sources currently referenced.
-  final Map<AssetId, _AssetBasedSource> sources;
+  final Map<AssetId, AssetBasedSource> sources;
 
   final InternalAnalysisContext _context =
       AnalysisEngine.instance.createAnalysisContext();
@@ -52,8 +52,8 @@ class ResolverImpl implements Resolver {
   /// Creates a resolver with a given [sdk] implementation for resolving
   /// `dart:*` imports.
   ResolverImpl(DartSdk sdk, DartUriResolver dartUriResolver,
-      {AnalysisOptions options, Map<AssetId, _AssetBasedSource> sources})
-      : sources = sources ?? <AssetId, _AssetBasedSource>{} {
+      {AnalysisOptions options, Map<AssetId, AssetBasedSource> sources})
+      : sources = sources ?? <AssetId, AssetBasedSource>{} {
     if (options == null) {
       options = new AnalysisOptionsImpl()
         ..cacheSize = 256 // # of sources to cache ASTs for.
@@ -121,7 +121,7 @@ class ResolverImpl implements Resolver {
       visiting.add(transform.readInputAsString(assetId).then((contents) {
         var source = sources[assetId];
         if (source == null) {
-          source = new _AssetBasedSource(assetId, this);
+          source = new AssetBasedSource(assetId, this);
           sources[assetId] = source;
         }
         source.updateDependencies(contents);
@@ -257,7 +257,7 @@ class ResolverImpl implements Resolver {
   /// the library URI.
   Uri _getSourceUri(Element element, {AssetId from}) {
     var source = element.source;
-    if (source is _AssetBasedSource) {
+    if (source is AssetBasedSource) {
       var uriString = assetIdToUri(source.assetId, from: from);
       return uriString != null ? Uri.parse(uriString) : null;
     } else if (source is UriAnnotatedSource) {
@@ -269,7 +269,7 @@ class ResolverImpl implements Resolver {
 
   AssetId getSourceAssetId(Element element) {
     var source = element.source;
-    if (source is _AssetBasedSource) return source.assetId;
+    if (source is AssetBasedSource) return source.assetId;
     return null;
   }
 
@@ -281,12 +281,12 @@ class ResolverImpl implements Resolver {
   }
 
   TextEditTransaction createTextEditTransaction(Element element) {
-    if (element.source is! _AssetBasedSource) return null;
+    if (element.source is! AssetBasedSource) return null;
 
     // Cannot edit unless there is an active transformer.
     if (_currentTransform == null) return null;
 
-    _AssetBasedSource source = element.source;
+    AssetBasedSource source = element.source;
     // Cannot modify assets in other packages.
     if (source.assetId.package != _currentTransform.primaryInput.id.package) {
       return null;
@@ -310,7 +310,7 @@ class ResolverImpl implements Resolver {
 }
 
 /// Implementation of Analyzer's Source for Barback based assets.
-class _AssetBasedSource extends Source {
+class AssetBasedSource extends Source {
   /// Asset ID where this source can be found.
   final AssetId assetId;
 
@@ -326,7 +326,7 @@ class _AssetBasedSource extends Source {
   /// The file contents.
   String _contents;
 
-  _AssetBasedSource(this.assetId, this._resolver);
+  AssetBasedSource(this.assetId, this._resolver);
 
   /// Update the dependencies of this source. This parses [contents] but avoids
   /// any analyzer resolution.
@@ -334,11 +334,9 @@ class _AssetBasedSource extends Source {
     if (contents == _contents) return;
     var unit = parseDirectives(contents, suppressErrors: true);
     _dependentAssets = unit.directives
-        .where((d) => (d is ImportDirective ||
-            d is PartDirective ||
-            d is ExportDirective))
-        .map((d) => _resolve(
-            assetId, d.uri.stringValue, _logger, _getSpan(d, contents)))
+        .where((d) => d is UriBasedDirective)
+        .map((d) => _resolve(assetId, (d as UriBasedDirective).uri.stringValue,
+            _logger, _getSpan(d, contents)))
         .where((id) => id != null)
         .toSet();
   }
@@ -376,7 +374,7 @@ class _AssetBasedSource extends Source {
   bool exists() => _contents != null;
 
   bool operator ==(Object other) =>
-      other is _AssetBasedSource && assetId == other.assetId;
+      other is AssetBasedSource && assetId == other.assetId;
 
   int get hashCode => assetId.hashCode;
 
@@ -458,7 +456,7 @@ class _AssetUriResolver implements UriResolver {
     // Analyzer expects that sources which are referenced but do not exist yet
     // still exist, so just make an empty source.
     if (source == null) {
-      source = new _AssetBasedSource(assetId, _resolver);
+      source = new AssetBasedSource(assetId, _resolver);
       _resolver.sources[assetId] = source;
     }
     return source;
@@ -559,7 +557,7 @@ class FutureGroup<E> {
 /// changes after it first discovers the transitive closure of files that are
 /// reachable from the sources.
 class _PendingUpdate {
-  _AssetBasedSource source;
+  AssetBasedSource source;
   String content;
 
   _PendingUpdate(this.source, this.content);

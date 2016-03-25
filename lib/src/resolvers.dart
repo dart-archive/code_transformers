@@ -37,11 +37,12 @@ class Resolvers {
   /// resolvers object is used. Any time that [Resolvers#get] or
   /// [Resolver#resolve] are called it will update the sources globally when
   /// this option is in use.
-  final Map<AssetId, dynamic> sharedSources;
+  final Map<AssetId, AssetBasedSource> sharedSources;
 
   Resolvers.fromSdk(this.dartSdk, this.dartUriResolver,
       {this.options, bool useSharedSources})
-      : sharedSources = useSharedSources == true ? <AssetId, dynamic>{} : null;
+      : sharedSources =
+            useSharedSources == true ? <AssetId, AssetBasedSource>{} : null;
 
   factory Resolvers(dartSdkDirectory,
       {AnalysisOptions options, bool useSharedSources}) {
@@ -93,14 +94,14 @@ abstract class ResolverTransformer implements Transformer {
   /// See [Resolver#resolve] for more info - can be overridden by a subclass.
   bool get resolveAllLibraries => true;
 
-  /// By default only process prossible entry point assets.
+  /// By default only process possible entry point assets.
   ///
   /// This is only a preliminary check based on the asset ID.
   Future<bool> isPrimary(assetOrId) {
     // assetOrId is to handle the transition from Asset to AssetID between
     // pub 1.3 and 1.4. Once support for 1.3 is dropped this should only
     // support AssetId.
-    var id = assetOrId is AssetId ? assetOrId : assetOrId.id;
+    var id = assetOrId is AssetId ? assetOrId : (assetOrId as Asset).id;
     return new Future.value(isPossibleDartEntryId(id));
   }
 

@@ -433,7 +433,7 @@ class TestTransformer extends Transformer with ResolverTransformer {
   // TODO(nweiz): This should just take an AssetId when barback <0.13.0 support
   // is dropped.
   Future<bool> isPrimary(idOrAsset) {
-    var id = idOrAsset is AssetId ? idOrAsset : idOrAsset.id;
+    var id = idOrAsset is AssetId ? idOrAsset : (idOrAsset as Asset).id;
     return new Future.value(id == primary);
   }
 

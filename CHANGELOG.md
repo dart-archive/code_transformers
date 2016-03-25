@@ -1,3 +1,8 @@
+## 0.4.2
+
+* Use Strong Mode, fixes
+  [#38](https://github.com/dart-lang/code_transformers/issues/38). 
+
 ## 0.4.1
 
 * Added a fix for [#24890](https://github.com/dart-lang/sdk/issues/24890).

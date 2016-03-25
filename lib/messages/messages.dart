@@ -184,6 +184,7 @@ class BuildLogEntry {
     }
     return data;
   }
+
   String toString() => '${toJson()}';
 }
 
@@ -198,8 +199,9 @@ class LogEntryTable {
     var res = new LogEntryTable();
     for (String key in json.keys) {
       var id = new MessageId.fromJson(key);
-      res.entries[id] =
-          json[key].map((v) => new BuildLogEntry.fromJson(v)).toList();
+      res.entries[id] = (json[key] as Iterable)
+          .map((v) => new BuildLogEntry.fromJson(v))
+          .toList();
     }
     return res;
   }
@@ -212,11 +214,13 @@ class LogEntryTable {
     });
     return res;
   }
+
   String toString() => '${toJson()}';
 
   void add(BuildLogEntry entry) {
     entries.putIfAbsent(entry.message.id, () => []).add(entry);
   }
+
   void addAll(LogEntryTable other) {
     for (var key in other.entries.keys) {
       var values = entries.putIfAbsent(key, () => []);

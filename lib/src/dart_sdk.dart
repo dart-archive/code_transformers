@@ -8,7 +8,8 @@ import 'dart:io' show Directory;
 
 /// Note that the Analyzer has two versions of SdkAnalysisContext (and lots of
 /// other classes) with different signatures: can't mix the two.
-import 'package:analyzer/src/generated/engine.dart' show InternalAnalysisContext, TimestampedData;
+import 'package:analyzer/src/generated/engine.dart'
+    show InternalAnalysisContext, TimestampedData;
 import 'package:analyzer/src/context/context.dart' show SdkAnalysisContext;
 import 'package:analyzer/src/generated/java_io.dart';
 import 'package:analyzer/src/generated/sdk.dart';
@@ -65,7 +66,6 @@ class DartUriResolverProxy implements DartUriResolver {
 /// This is primarily to support [Resolver.getImportUri] for Dart SDK (dart:)
 /// based libraries.
 class DartSourceProxy implements UriAnnotatedSource {
-
   /// Absolute URI which this source can be imported from
   final Uri uri;
 
@@ -204,6 +204,8 @@ class _MockSdkSource implements UriAnnotatedSource {
 
   Uri resolveRelativeUri(Uri relativeUri) =>
       throw new UnsupportedError('not expecting relative urls in dart: mocks');
+
+  bool operator ==(Object other) => identical(this, other);
 }
 
 /// Sample mock SDK sources.
