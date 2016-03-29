@@ -1,7 +1,12 @@
+## 0.4.2+1
+
+* Contains a fix for the `useSharedSources` option that could result in null
+  library elements when running on multiple entry points.
+
 ## 0.4.2
 
 * Use Strong Mode, fixes
-  [#38](https://github.com/dart-lang/code_transformers/issues/38). 
+  [#38](https://github.com/dart-lang/code_transformers/issues/38).
 
 ## 0.4.1
 
