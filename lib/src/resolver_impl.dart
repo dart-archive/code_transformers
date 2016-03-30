@@ -6,10 +6,10 @@ library code_transformer.src.resolver_impl;
 
 import 'dart:async';
 import 'package:analyzer/analyzer.dart' show parseDirectives;
-import 'package:analyzer/src/generated/ast.dart' hide ConstantEvaluator;
+import 'package:analyzer/dart/ast/ast.dart' hide ConstantEvaluator;
 import 'package:analyzer/src/generated/constant.dart'
     show ConstantEvaluator, EvaluationResult;
-import 'package:analyzer/src/generated/element.dart';
+import 'package:analyzer/dart/element/element.dart';
 import 'package:analyzer/src/generated/engine.dart';
 import 'package:analyzer/src/generated/sdk.dart' show DartSdk;
 import 'package:analyzer/src/generated/source.dart';
@@ -65,7 +65,6 @@ class ResolverImpl implements Resolver {
         ..analyzeFunctionBodies = true;
     }
     _context.analysisOptions = options;
-    sdk.context.analysisOptions = options;
     _context.sourceFactory =
         new SourceFactory([dartUriResolver, new _AssetUriResolver(this)]);
   }

@@ -58,7 +58,7 @@ class Resolvers {
       AnalysisOptions options,
       bool useSharedSources}) {
     _initAnalysisEngine();
-    var sdk = new MockDartSdk(sources, reportMissing: reportMissing);
+    var sdk = new MockDartSdk(sources, options, reportMissing: reportMissing);
     return new Resolvers.fromSdk(sdk, sdk.resolver,
         options: options, useSharedSources: useSharedSources);
   }

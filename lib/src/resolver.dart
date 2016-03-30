@@ -6,9 +6,9 @@ library code_transformer.src.resolver;
 
 import 'dart:async';
 
-import 'package:analyzer/src/generated/ast.dart' show Expression;
+import 'package:analyzer/dart/ast/ast.dart' show Expression;
 import 'package:analyzer/src/generated/constant.dart' show EvaluationResult;
-import 'package:analyzer/src/generated/element.dart';
+import 'package:analyzer/dart/element/element.dart';
 import 'package:barback/barback.dart';
 import 'package:source_maps/refactor.dart';
 import 'package:source_span/source_span.dart';
