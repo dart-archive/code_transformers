@@ -1,3 +1,7 @@
+## 0.4.2+2
+
+* Update to work with analyzer 0.23.x.
+
 ## 0.4.2+1
 
 * Contains a fix for the `useSharedSources` option that could result in null

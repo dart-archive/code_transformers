@@ -195,11 +195,11 @@ class LogEntryTable {
   LogEntryTable() : entries = new LinkedHashMap();
 
   /// Creates a new [LogEntryTable] from an encoded value produced via [toJson].
-  factory LogEntryTable.fromJson(Map json) {
+  factory LogEntryTable.fromJson(Map<String, Iterable> json) {
     var res = new LogEntryTable();
     for (String key in json.keys) {
       var id = new MessageId.fromJson(key);
-      res.entries[id] = (json[key] as Iterable)
+      res.entries[id] = json[key]
           .map((v) => new BuildLogEntry.fromJson(v))
           .toList();
     }

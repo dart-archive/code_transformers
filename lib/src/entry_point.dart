@@ -4,7 +4,7 @@
 import 'dart:async';
 
 import 'package:analyzer/analyzer.dart' as analyzer;
-import 'package:analyzer/src/generated/ast.dart';
+import 'package:analyzer/dart/ast/ast.dart';
 import 'package:barback/barback.dart';
 
 /// Checks to see if the provided AssetId is a Dart file in a directory which

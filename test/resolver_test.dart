@@ -199,7 +199,6 @@ resolverTests(Resolvers resolvers) {
           messages: [
             // First from the AST walker
             '$warningPrefix: "/b.dart" (web/main.dart 0 14)',
-            '$warningPrefix: "/b.dart"',
           ],
           validator: (resolver) {
             var lib = resolver.getLibrary(entryPoint);

@@ -9,7 +9,7 @@ import 'dart:io' show Directory;
 /// Note that the Analyzer has two versions of SdkAnalysisContext (and lots of
 /// other classes) with different signatures: can't mix the two.
 import 'package:analyzer/src/generated/engine.dart'
-    show InternalAnalysisContext, TimestampedData;
+    show AnalysisOptions, InternalAnalysisContext, TimestampedData;
 import 'package:analyzer/src/context/context.dart' show SdkAnalysisContext;
 import 'package:analyzer/src/generated/java_io.dart';
 import 'package:analyzer/src/generated/sdk.dart';
@@ -128,11 +128,13 @@ class MockDartSdk implements DartSdk {
   final Map<String, SdkLibrary> _libs = {};
   final String sdkVersion = '0';
   List<String> get uris => _sources.keys.map((uri) => '$uri').toList();
-  final InternalAnalysisContext context = new SdkAnalysisContext();
+  final InternalAnalysisContext context;
   DartUriResolver _resolver;
   DartUriResolver get resolver => _resolver;
 
-  MockDartSdk(Map<String, String> sources, {this.reportMissing}) {
+  MockDartSdk(Map<String, String> sources, AnalysisOptions options,
+      {this.reportMissing})
+      : this.context = new SdkAnalysisContext(options) {
     sources.forEach((uriString, contents) {
       var uri = Uri.parse(uriString);
       _sources[uri] = new _MockSdkSource(uri, contents);

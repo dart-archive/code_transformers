@@ -125,7 +125,8 @@ class BuildLogger implements TransformLogger {
     return transform.hasInput(nextAssetPath).then((exists) {
       if (!exists) return null;
       return transform.readInputAsString(nextAssetPath).then((data) {
-        entries.addAll(new LogEntryTable.fromJson(JSON.decode(data)));
+        entries.addAll(new LogEntryTable.fromJson(
+            JSON.decode(data) as Map<String, Iterable>));
         return _readLogFilesForAsset(id, transform, entries, ++nextNumber);
       });
     });
