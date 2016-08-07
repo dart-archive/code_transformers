@@ -34,7 +34,8 @@ class MessageId implements Comparable {
 
   toString() => '${package}#$id';
 
-  int compareTo(MessageId other) {
+  int compareTo(_other) {
+    MessageId other = _other as MessageId;
     var res = package.compareTo(other.package);
     if (res != 0) return res;
     return id.compareTo(other.id);
@@ -48,7 +49,7 @@ class MessageId implements Comparable {
         data.substring(0, index), int.parse(data.substring(index + 1)));
   }
 
-  operator ==(MessageId other) => package == other.package && id == other.id;
+  operator ==(other) => other is MessageId && package == other.package && id == other.id;
   int get hashCode => 31 * package.hashCode + id;
 }
 
