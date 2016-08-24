@@ -11,13 +11,14 @@ library code_transformers.messages;
 // so it can easily be used both in the transformers and in client-side apps
 // (for example in the log_injector).
 import 'dart:collection' show LinkedHashMap;
+
 import 'package:source_span/source_span.dart';
 
 /// A globally unique identifier for an error message. This identifier should be
 /// stable, that is, it should never change after it is asigned to a particular
 /// message. That allows us to document our error messages and make them
 /// searchable for prosperity.
-class MessageId implements Comparable {
+class MessageId implements Comparable<MessageId> {
   /// Name of the package that declares this message.
   final String package;
 
@@ -48,7 +49,9 @@ class MessageId implements Comparable {
         data.substring(0, index), int.parse(data.substring(index + 1)));
   }
 
-  operator ==(MessageId other) => package == other.package && id == other.id;
+  operator ==(Object other) =>
+      other is MessageId && package == other.package && id == other.id;
+
   int get hashCode => 31 * package.hashCode + id;
 }
 
@@ -199,9 +202,8 @@ class LogEntryTable {
     var res = new LogEntryTable();
     for (String key in json.keys) {
       var id = new MessageId.fromJson(key);
-      res.entries[id] = json[key]
-          .map((v) => new BuildLogEntry.fromJson(v))
-          .toList();
+      res.entries[id] =
+          json[key].map((v) => new BuildLogEntry.fromJson(v)).toList();
     }
     return res;
   }
