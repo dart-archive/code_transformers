@@ -6,7 +6,7 @@ library code_transformer.src.resolver_impl;
 
 import 'dart:async';
 import 'package:analyzer/analyzer.dart' show parseDirectives;
-import 'package:analyzer/dart/ast/ast.dart' hide ConstantEvaluator;
+import 'package:analyzer/dart/ast/ast.dart';
 import 'package:analyzer/src/generated/constant.dart'
     show ConstantEvaluator, EvaluationResult;
 import 'package:analyzer/dart/element/element.dart';

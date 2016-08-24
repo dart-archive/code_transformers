@@ -10,7 +10,7 @@ import 'dart:convert' show JSON;
 import 'package:barback/barback.dart';
 import 'package:source_span/source_span.dart';
 
-import 'messages.dart' show Message, MessageId, BuildLogEntry, LogEntryTable;
+import 'messages.dart' show Message, BuildLogEntry, LogEntryTable;
 
 /// A [TransformLogger] used to track error and warning messages produced during
 /// a build.
