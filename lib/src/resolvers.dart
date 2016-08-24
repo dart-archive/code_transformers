@@ -10,8 +10,7 @@ import 'package:barback/barback.dart';
 import 'package:analyzer/src/generated/engine.dart' show AnalysisOptions;
 import 'package:analyzer/src/generated/sdk.dart' show DartSdk;
 import 'package:analyzer/src/generated/engine.dart';
-import 'package:analyzer/src/generated/source.dart'
-    show DartUriResolver, Source;
+import 'package:analyzer/src/generated/source.dart' show DartUriResolver;
 
 import 'entry_point.dart';
 import 'resolver.dart';

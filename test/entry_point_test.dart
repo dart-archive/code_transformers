@@ -19,7 +19,9 @@ main() {
         expect(value, expectation);
       });
     });
-    return applyTransformers([[transformer]], inputs: inputs);
+    return applyTransformers([
+      [transformer]
+    ], inputs: inputs);
   }
 
   group('isPossibleDartEntry', () {

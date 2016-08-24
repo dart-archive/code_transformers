@@ -111,6 +111,8 @@ class DartSourceProxy implements UriAnnotatedSource {
 
   String get fullName => _proxy.fullName;
 
+  Source get librarySource => _proxy.librarySource;
+
   int get modificationStamp => _proxy.modificationStamp;
 
   String get shortName => _proxy.shortName;

@@ -14,20 +14,28 @@ import 'package:source_span/source_span.dart';
 main() {
   group('snippet', () {
     test('template with no-args works', () {
-      expect(new MessageTemplate(_id('code_transformers', 1),
-              'this message has no args', '', '').snippet,
+      expect(
+          new MessageTemplate(_id('code_transformers', 1),
+                  'this message has no args', '', '')
+              .snippet,
           'this message has no args');
     });
 
     test('template with args throws', () {
-      expect(() => new MessageTemplate(_id('code_transformers', 1),
-          'this message has %-args-%', '', '').snippet, throws);
+      expect(
+          () => new MessageTemplate(_id('code_transformers', 1),
+                  'this message has %-args-%', '', '')
+              .snippet,
+          throws);
     });
 
     test('can pass arguments to create snippet', () {
-      expect(new MessageTemplate(_id('code_transformers', 1),
-                  'a %-b-% c something %-name-% too', '', '')
-              .create({'b': "1", 'name': 'foo'}).snippet,
+      expect(
+          new MessageTemplate(
+              _id('code_transformers', 1),
+              'a %-b-% c something %-name-% too',
+              '',
+              '').create({'b': "1", 'name': 'foo'}).snippet,
           'a 1 c something foo too');
     });
   });
@@ -86,7 +94,8 @@ main() {
         expect(table.entries[_id('hi', 11)].length, 2);
         expect(table.entries[_id('hi', 13)].length, 1);
 
-        var table2 = new LogEntryTable.fromJson(toJson(table));
+        var table2 =
+            new LogEntryTable.fromJson(toJson(table) as Map<String, Iterable>);
         expect(table2.entries.length, 2);
         expect(table2.entries[_id('hi', 11)].length, 2);
         expect(table2.entries[_id('hi', 13)].length, 1);
@@ -100,9 +109,12 @@ main() {
     });
   }
 }
+
 _id(s, i) => new MessageId(s, i);
 _entry(id, snippet, offset) => new BuildLogEntry(
-    new Message(_id('hi', id), snippet), new SourceSpan(
+    new Message(_id('hi', id), snippet),
+    new SourceSpan(
         new SourceLocation(offset, sourceUrl: 'a', line: 1, column: 3),
         new SourceLocation(offset + 2, sourceUrl: 'a', line: 1, column: 5),
-        'hi'), 'Warning');
+        'hi'),
+    'Warning');
