@@ -15,12 +15,8 @@ import 'package:barback/barback.dart';
 bool isPossibleDartEntryId(AssetId id) {
   if (id.extension != '.dart') return false;
 
-  return [
-    'benchmark',
-    'example',
-    'test',
-    'web'
-  ].any((dir) => id.path.startsWith("$dir/"));
+  return ['benchmark', 'example', 'test', 'web']
+      .any((dir) => id.path.startsWith("$dir/"));
 }
 
 /// Checks to see if the provided Asset is possibly a Dart entry point.
@@ -43,10 +39,10 @@ Future<bool> isPossibleDartEntry(Asset asset) {
 bool _couldBeEntrypoint(CompilationUnit compilationUnit) {
   // Allow two or fewer arguments so that entrypoints intended for use with
   // [spawnUri] get counted.
-  var hasMain = compilationUnit.declarations.any(
-      (node) => node is FunctionDeclaration &&
-          node.name.name == "main" &&
-          node.functionExpression.parameters.parameters.length <= 2);
+  var hasMain = compilationUnit.declarations.any((node) =>
+      node is FunctionDeclaration &&
+      node.name.name == "main" &&
+      node.functionExpression.parameters.parameters.length <= 2);
 
   if (hasMain) return true;
 

@@ -11,11 +11,11 @@ import 'package:test/test.dart';
 main() {
   test('can benchmark transformers', () {
     var transformer = new TestTransformer();
-    var transformers = [[transformer]];
+    var transformers = [
+      [transformer]
+    ];
     var id = new AssetId('foo', 'lib/bar.dart');
-    var files = {
-        id: 'library foo.bar;',
-    };
+    var files = {id: 'library foo.bar;',};
     var benchmark = new TransformerBenchmark(transformers, files);
     return benchmark.measure().then((result) {
       expect(result, greaterThan(0));

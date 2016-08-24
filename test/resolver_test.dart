@@ -25,7 +25,7 @@ main() {
 
   group('shared sources', () {
     resolverTests(
-      new Resolvers.fromMock(mockSdkSources, useSharedSources: true));
+        new Resolvers.fromMock(mockSdkSources, useSharedSources: true));
   });
 }
 
