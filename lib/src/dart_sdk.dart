@@ -182,6 +182,8 @@ class _MockSdkSource implements UriAnnotatedSource {
 
   Source get source => this;
 
+  Source get librarySource => null;
+
   _MockSdkSource(this.uri, this._contents);
 
   bool exists() => true;
