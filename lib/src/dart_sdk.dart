@@ -15,6 +15,7 @@ import 'package:analyzer/src/generated/java_io.dart';
 import 'package:analyzer/src/generated/sdk.dart';
 import 'package:analyzer/src/generated/sdk_io.dart' show DirectoryBasedDartSdk;
 import 'package:analyzer/src/generated/source.dart';
+import 'package:analyzer/src/summary/idl.dart';
 import 'package:cli_util/cli_util.dart' as cli_util;
 
 /// Attempts to provide the current Dart SDK directory.
@@ -173,6 +174,9 @@ class MockDartSdk implements DartSdk {
   Source fromFileUri(Uri uri) {
     throw new UnsupportedError('MockDartSdk.fromFileUri');
   }
+
+  @override
+  PackageBundle getLinkedBundle() => null;
 }
 
 class _MockSdkSource implements UriAnnotatedSource {
