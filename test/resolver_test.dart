@@ -145,7 +145,7 @@ resolverTests(Resolvers resolvers) {
           },
           validator: (resolver) {
             var lib = resolver.getLibrary(entryPoint);
-            expect(lib.importedLibraries.length, 1);
+            expect(lib.importedLibraries.length, 2);
           });
     });
 
@@ -182,7 +182,8 @@ resolverTests(Resolvers resolvers) {
           },
           validator: (resolver) {
             var lib = resolver.getLibrary(entryPoint);
-            expect(lib.importedLibraries.length, 1);
+            expect(lib.importedLibraries.length, 2);
+            expect(lib.importedLibraries.where((l) => l.name == 'b'), isEmpty);
           });
     });
 
@@ -202,7 +203,7 @@ resolverTests(Resolvers resolvers) {
           ],
           validator: (resolver) {
             var lib = resolver.getLibrary(entryPoint);
-            expect(lib.importedLibraries.length, 1);
+            expect(lib.importedLibraries.length, 2);
           });
     });
 
