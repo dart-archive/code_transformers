@@ -1,3 +1,6 @@
+## 0.4.2+3
+* Update to work with analyzer 0.28.x.
+
 ## 0.4.2+2
 
 * Update to work with analyzer 0.23.x.
