@@ -7,6 +7,7 @@ library code_transformers.src.resolvers;
 import 'dart:async';
 import 'package:barback/barback.dart';
 
+import 'package:analyzer/file_system/physical_file_system.dart';
 import 'package:analyzer/src/generated/engine.dart' show AnalysisOptions;
 import 'package:analyzer/src/generated/sdk.dart' show DartSdk;
 import 'package:analyzer/src/generated/engine.dart';
@@ -43,10 +44,11 @@ class Resolvers {
       : sharedSources =
             useSharedSources == true ? <AssetId, AssetBasedSource>{} : null;
 
-  factory Resolvers(dartSdkDirectory,
+  factory Resolvers(String dartSdkDirectory,
       {AnalysisOptions options, bool useSharedSources}) {
     _initAnalysisEngine();
-    var sdk = new DirectoryBasedDartSdkProxy(dartSdkDirectory);
+    var sdk = new FolderBasedDartSdkProxy(
+        PhysicalResourceProvider.INSTANCE, dartSdkDirectory);
     var uriResolver = new DartUriResolverProxy(sdk);
     return new Resolvers.fromSdk(sdk, uriResolver,
         options: options, useSharedSources: useSharedSources);
