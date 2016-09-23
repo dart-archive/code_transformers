@@ -27,22 +27,11 @@ import 'dart_sdk.dart' hide dartSdkDirectory;
 /// If multiple transformers rely on a resolved AST they should (ideally) share
 /// the same Resolvers object to minimize re-parsing the AST.
 class Resolvers {
-  final Map<AssetId, Resolver> _resolvers = {};
-  final DartSdk dartSdk;
-  final DartUriResolver dartUriResolver;
-  final AnalysisOptions options;
+  final Resolver _resolver;
 
-  /// Null unless `useSharedSources` is true. This option should only be used if
-  /// you know that files are always in a consistent state wherever this
-  /// resolvers object is used. Any time that [Resolvers#get] or
-  /// [Resolver#resolve] are called it will update the sources globally when
-  /// this option is in use.
-  final Map<AssetId, AssetBasedSource> sharedSources;
-
-  Resolvers.fromSdk(this.dartSdk, this.dartUriResolver,
-      {this.options, bool useSharedSources})
-      : sharedSources =
-            useSharedSources == true ? <AssetId, AssetBasedSource>{} : null;
+  Resolvers.fromSdk(DartSdk dartSdk, DartUriResolver dartUriResolver,
+      {AnalysisOptions options, bool useSharedSources}) :
+  _resolver = new ResolverImpl(dartSdk, dartUriResolver, options: options);
 
   factory Resolvers(String dartSdkDirectory,
       {AnalysisOptions options, bool useSharedSources}) {
@@ -75,12 +64,7 @@ class Resolvers {
   /// See [Resolver#resolve] for more info on the `resolveAllLibraries` option.
   Future<Resolver> get(Transform transform,
       [List<AssetId> entryPoints, bool resolveAllLibraries]) {
-    var id = transform.primaryInput.id;
-    var resolver = _resolvers.putIfAbsent(
-        id,
-        () => new ResolverImpl(dartSdk, dartUriResolver,
-            options: options, sources: sharedSources));
-    return resolver.resolve(transform, entryPoints, resolveAllLibraries);
+    return _resolver.resolve(transform, entryPoints, resolveAllLibraries);
   }
 }
 
