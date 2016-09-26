@@ -30,8 +30,9 @@ class Resolvers {
   final Resolver _resolver;
 
   Resolvers.fromSdk(DartSdk dartSdk, DartUriResolver dartUriResolver,
-      {AnalysisOptions options, bool useSharedSources}) :
-  _resolver = new ResolverImpl(dartSdk, dartUriResolver, options: options);
+      {AnalysisOptions options, bool useSharedSources})
+      : _resolver = new ResolverImpl(dartSdk, dartUriResolver,
+            options: options, sources: {});
 
   factory Resolvers(String dartSdkDirectory,
       {AnalysisOptions options, bool useSharedSources}) {
