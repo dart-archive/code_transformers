@@ -64,9 +64,8 @@ class Resolvers {
   ///
   /// See [Resolver#resolve] for more info on the `resolveAllLibraries` option.
   Future<Resolver> get(Transform transform,
-      [List<AssetId> entryPoints, bool resolveAllLibraries]) {
-    return _resolver.resolve(transform, entryPoints, resolveAllLibraries);
-  }
+          [List<AssetId> entryPoints, bool resolveAllLibraries]) =>
+      _resolver.resolve(transform, entryPoints, resolveAllLibraries);
 }
 
 /// Transformer mixin which automatically gets and releases resolvers.
