@@ -30,28 +30,23 @@ class Resolvers {
   final Resolver _resolver;
 
   Resolvers.fromSdk(DartSdk dartSdk, DartUriResolver dartUriResolver,
-      {AnalysisOptions options, bool useSharedSources})
-      : _resolver = new ResolverImpl(dartSdk, dartUriResolver,
-            options: options, sources: {});
+      {AnalysisOptions options})
+      : _resolver =
+            new ResolverImpl(dartSdk, dartUriResolver, options: options);
 
-  factory Resolvers(String dartSdkDirectory,
-      {AnalysisOptions options, bool useSharedSources}) {
+  factory Resolvers(String dartSdkDirectory, {AnalysisOptions options}) {
     _initAnalysisEngine();
     var sdk = new FolderBasedDartSdkProxy(
         PhysicalResourceProvider.INSTANCE, dartSdkDirectory);
     var uriResolver = new DartUriResolverProxy(sdk);
-    return new Resolvers.fromSdk(sdk, uriResolver,
-        options: options, useSharedSources: useSharedSources);
+    return new Resolvers.fromSdk(sdk, uriResolver, options: options);
   }
 
   factory Resolvers.fromMock(Map<String, String> sources,
-      {bool reportMissing: false,
-      AnalysisOptions options,
-      bool useSharedSources}) {
+      {bool reportMissing: false, AnalysisOptions options}) {
     _initAnalysisEngine();
     var sdk = new MockDartSdk(sources, options, reportMissing: reportMissing);
-    return new Resolvers.fromSdk(sdk, sdk.resolver,
-        options: options, useSharedSources: useSharedSources);
+    return new Resolvers.fromSdk(sdk, sdk.resolver, options: options);
   }
 
   /// Get a resolver for [transform]. If provided, this resolves the code

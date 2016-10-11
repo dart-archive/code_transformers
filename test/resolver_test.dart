@@ -24,8 +24,7 @@ main() {
   });
 
   group('shared sources', () {
-    resolverTests(
-        new Resolvers.fromMock(mockSdkSources, useSharedSources: true));
+    resolverTests(new Resolvers.fromMock(mockSdkSources));
   });
 }
 
@@ -47,7 +46,9 @@ resolverTests(Resolvers resolvers) {
   group('Resolver', () {
     test('should handle initial files', () {
       return validateResolver(
-          inputs: {'a|web/main.dart': ' main() {}',},
+          inputs: {
+            'a|web/main.dart': ' main() {}',
+          },
           validator: (resolver) {
             var source = resolver.sources[entryPoint];
             expect(source.modificationStamp, 1);
@@ -223,8 +224,15 @@ resolverTests(Resolvers resolvers) {
           },
           validator: (resolver) {
             var libs = resolver.libraries.where((l) => !l.isInSdk);
-            expect(libs.map((l) => l.name),
-                unorderedEquals(['a.main', 'a.a', 'a.b', 'a.c', 'a.d',]));
+            expect(
+                libs.map((l) => l.name),
+                unorderedEquals([
+                  'a.main',
+                  'a.a',
+                  'a.b',
+                  'a.c',
+                  'a.d',
+                ]));
           });
     });
 
