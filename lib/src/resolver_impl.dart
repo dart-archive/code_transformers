@@ -140,6 +140,7 @@ class ResolverImpl implements Resolver {
         }
       }));
     }
+
     entryPoints.forEach(processAsset);
 
     // Once we have all asset sources updated with the new contents then

@@ -54,6 +54,7 @@ main() {
         _eq(msg) {
           expect(new MessageId.fromJson(toJson(msg)) == msg, isTrue);
         }
+
         _eq(const MessageId('hi', 23));
         _eq(new MessageId('hi', 23));
         _eq(new MessageId('a_b', 23));
@@ -68,6 +69,7 @@ main() {
           expect(msg.id, parsed.id);
           expect(msg.snippet, parsed.snippet);
         }
+
         _eq(new Message(_id('hi', 33), 'snippet here'));
         _eq(new MessageTemplate(
             _id('hi', 33), 'snippet', 'ignored', 'ignored'));
@@ -81,6 +83,7 @@ main() {
           expect(entry.level, parsed.level);
           expect(entry.span, parsed.span);
         }
+
         _eq(_entry(33, 'hi there', 12));
         _eq(_entry(33, 'hi there-', 11));
       });
