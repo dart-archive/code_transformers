@@ -7,7 +7,7 @@ set -e
 dartanalyzer --fatal-warnings lib/*dart lib/messages/*dart test/*dart
 
 # Test
-pub run test:test
+pub run test
 
 # Check format
 pub global activate dart_style
