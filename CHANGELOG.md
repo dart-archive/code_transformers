@@ -1,4 +1,9 @@
+## 0.4.2+4
+
+* Update to work with analyzer 0.29.x and transform_test 0.2.x
+
 ## 0.4.2+3
+
 * Update to work with analyzer 0.28.x.
 
 ## 0.4.2+2
