@@ -52,7 +52,7 @@ class ResolverImpl implements Resolver {
   /// Creates a resolver with a given [sdk] implementation for resolving
   /// `dart:*` imports.
   ResolverImpl(DartSdk sdk, DartUriResolver dartUriResolver,
-      {AnalysisOptions options, Map<AssetId, AssetBasedSource> sources}) {
+      {AnalysisOptions options}) {
     if (options == null) {
       options = new AnalysisOptionsImpl()
         ..cacheSize = 256 // # of sources to cache ASTs for.
