@@ -31,7 +31,7 @@ final path = native_path.url;
 /// with the resolved AST.
 class ResolverImpl implements Resolver {
   /// Cache of all asset sources currently referenced.
-  final Map<AssetId, AssetBasedSource> sources;
+  final Map<AssetId, AssetBasedSource> sources = {};
 
   final InternalAnalysisContext _context =
       AnalysisEngine.instance.createAnalysisContext();
@@ -49,15 +49,10 @@ class ResolverImpl implements Resolver {
   /// Completer for wrapping up the current phase.
   Completer _currentPhaseComplete;
 
-  /// Whether or not we are using a shared sources cache.
-  final bool _usingSharedSources;
-
   /// Creates a resolver with a given [sdk] implementation for resolving
   /// `dart:*` imports.
   ResolverImpl(DartSdk sdk, DartUriResolver dartUriResolver,
-      {AnalysisOptions options, Map<AssetId, AssetBasedSource> sources})
-      : _usingSharedSources = sources != null,
-        sources = sources ?? <AssetId, AssetBasedSource>{} {
+      {AnalysisOptions options}) {
     if (options == null) {
       options = new AnalysisOptionsImpl()
         ..cacheSize = 256 // # of sources to cache ASTs for.
@@ -148,18 +143,6 @@ class ResolverImpl implements Resolver {
     return visiting.future.then((_) {
       var changeSet = new ChangeSet();
       toUpdate.forEach((pending) => pending.apply(changeSet));
-
-      // If we aren't using shared sources, then remove from the cache any
-      // sources which are no longer reachable.
-      if (!_usingSharedSources) {
-        var unreachableAssets =
-            sources.keys.toSet().difference(visited).map((id) => sources[id]);
-        for (var unreachable in unreachableAssets) {
-          changeSet.removedSource(unreachable);
-          unreachable.updateContents(null);
-          sources.remove(unreachable.assetId);
-        }
-      }
 
       // Update the analyzer context with the latest sources
       _context.applyChanges(changeSet);

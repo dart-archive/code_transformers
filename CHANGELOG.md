@@ -1,3 +1,11 @@
+## 0.5.0
+
+* Always use a single `Resolver` instance. Fixes an issue where running with the
+  'build' package in file watching mode would treat some files as never
+  changing.
+* Breaking Change: remove the `useSharedSources` argument to Resolvers ctor
+  since sources are always shared.
+
 ## 0.4.2+4
 
 * Update to work with analyzer 0.29.x and transform_test 0.2.x
