@@ -26,44 +26,51 @@ main() {
 
   group('isPossibleDartEntry', () {
     test('should handle empty files', () {
-      return checkDartEntry(
-          inputs: {'a|web/main.dart': '',}, expectation: false);
+      return checkDartEntry(inputs: {
+        'a|web/main.dart': '',
+      }, expectation: false);
     });
 
     test('should detect main methods', () {
-      return checkDartEntry(
-          inputs: {'a|web/main.dart': 'main() {}',}, expectation: true);
+      return checkDartEntry(inputs: {
+        'a|web/main.dart': 'main() {}',
+      }, expectation: true);
     });
 
     test('should exclude dart mains in lib folder', () {
-      return checkDartEntry(
-          inputs: {'a|lib/main.dart': 'main() {}',}, expectation: false);
+      return checkDartEntry(inputs: {
+        'a|lib/main.dart': 'main() {}',
+      }, expectation: false);
     });
 
     test('should validate file extension', () {
-      return checkDartEntry(
-          inputs: {'a|web/main.not_dart': 'main() {}',}, expectation: false);
+      return checkDartEntry(inputs: {
+        'a|web/main.not_dart': 'main() {}',
+      }, expectation: false);
     });
 
     test('should count exports as main', () {
-      return checkDartEntry(
-          inputs: {'a|web/main.dart': 'export "foo.dart";',},
-          expectation: true);
+      return checkDartEntry(inputs: {
+        'a|web/main.dart': 'export "foo.dart";',
+      }, expectation: true);
     });
 
     test('should count parts as main', () {
-      return checkDartEntry(
-          inputs: {'a|web/main.dart': 'part "foo.dart";',}, expectation: true);
+      return checkDartEntry(inputs: {
+        'a|web/main.dart': 'part "foo.dart";',
+      }, expectation: true);
     });
 
     test('is tolerant of syntax errors with main', () {
-      return checkDartEntry(
-          inputs: {'a|web/main.dart': 'main() {} {',}, expectation: true);
+      return checkDartEntry(inputs: {
+        'a|web/main.dart': 'main() {} {',
+      }, expectation: true);
     });
 
     test('is tolerant of syntax errors without main', () {
-      return checkDartEntry(
-          inputs: {'a|web/main.dart': 'class Foo {',}, expectation: false);
+      return checkDartEntry(inputs: {
+        'a|web/main.dart': 'class Foo {',
+      }, expectation: false);
     });
   });
 }
