@@ -1,3 +1,7 @@
+## 0.5.0+1
+
+* Stop using deprecated analyzer apis.
+
 ## 0.5.0
 
 * Always use a single `Resolver` instance. Fixes an issue where running with the
