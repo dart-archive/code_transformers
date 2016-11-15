@@ -55,7 +55,6 @@ class ResolverImpl implements Resolver {
       {AnalysisOptions options}) {
     if (options == null) {
       options = new AnalysisOptionsImpl()
-        ..cacheSize = 256 // # of sources to cache ASTs for.
         ..preserveComments = false
         ..analyzeFunctionBodies = true;
     }
