@@ -65,7 +65,10 @@ class ResolverImpl implements Resolver {
 
   LibraryElement getLibrary(AssetId assetId) {
     var source = sources[assetId];
-    return source == null ? null : _context.computeLibraryElement(source);
+    if (source == null) return null;
+    var kind = _context.computeKindOf(source);
+    if (kind != SourceKind.LIBRARY) return null;
+    return _context.computeLibraryElement(source);
   }
 
   Future<Resolver> resolve(Transform transform,
@@ -150,6 +153,8 @@ class ResolverImpl implements Resolver {
       _entryLibraries = entryPoints.map((id) {
         var source = sources[id];
         if (source == null) return null;
+        var kind = _context.computeKindOf(source);
+        if (kind != SourceKind.LIBRARY) return null;
         return _context.computeLibraryElement(source);
       }).toList();
 

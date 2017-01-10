@@ -1,3 +1,8 @@
+## 0.5.0+2
+
+* Resolver no longer returns a partial LibraryElement for assets which are no
+  libraries
+
 ## 0.5.0+1
 
 * Stop using deprecated analyzer apis.
