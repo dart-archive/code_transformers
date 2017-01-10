@@ -1,6 +1,6 @@
 ## 0.5.0+2
 
-* Resolver no longer returns a partial LibraryElement for assets which are no
+* Resolver no longer returns a partial LibraryElement for assets which are not
   libraries
 
 ## 0.5.0+1
