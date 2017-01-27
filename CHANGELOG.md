@@ -1,3 +1,8 @@
+## 0.5.1
+
+* Resolver has a new method which can check whether an Asset is a Dart library
+  source
+
 ## 0.5.0+2
 
 * Resolver no longer returns a partial LibraryElement for assets which are not

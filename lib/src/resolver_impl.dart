@@ -63,11 +63,20 @@ class ResolverImpl implements Resolver {
         new SourceFactory([dartUriResolver, new _AssetUriResolver(this)]);
   }
 
+  @override
+  bool isLibrary(AssetId assetId) {
+    var source = sources[assetId];
+    return source != null && _isLibrary(source);
+  }
+
+  bool _isLibrary(Source source) =>
+      _context.computeKindOf(source) == SourceKind.LIBRARY;
+
+  @override
   LibraryElement getLibrary(AssetId assetId) {
     var source = sources[assetId];
     if (source == null) return null;
-    var kind = _context.computeKindOf(source);
-    if (kind != SourceKind.LIBRARY) return null;
+    if (!_isLibrary(source)) return null;
     return _context.computeLibraryElement(source);
   }
 
