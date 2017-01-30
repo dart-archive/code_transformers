@@ -1,3 +1,7 @@
+## 0.5.1+1
+
+* Updated mock SDK sources to include FutureOr<T> (and fixed a syntax error)
+
 ## 0.5.1
 
 * Resolver has a new method which can check whether an Asset is a Dart library
