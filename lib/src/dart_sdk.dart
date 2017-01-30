@@ -262,6 +262,8 @@ final Map<String, String> mockSdkSources = {
   'dart:async': '''
         class Future<T> {
           Future then(callback) {}
+        }
+        class FutureOr<T> {}
         class Stream<T> {}
   ''',
   'dart:html': '''
