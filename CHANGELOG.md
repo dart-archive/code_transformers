@@ -1,3 +1,7 @@
+## 0.5.1+2
+
+* Support the latest `analyzer` package.
+
 ## 0.5.1+1
 
 * Updated mock SDK sources to include FutureOr<T> (and fixed a syntax error)

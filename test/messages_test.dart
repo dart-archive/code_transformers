@@ -26,7 +26,7 @@ main() {
           () => new MessageTemplate(_id('code_transformers', 1),
                   'this message has %-args-%', '', '')
               .snippet,
-          throws);
+          throwsA(contains("missing argument args")));
     });
 
     test('can pass arguments to create snippet', () {
