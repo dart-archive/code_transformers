@@ -3,7 +3,11 @@ sudo: false
 dart:
   - dev
   - stable
+dart_task:
+  - test: --platform vm
+  - dartanalyzer: --fatal-warnings .
+  - dartfmt
+
 cache:
   directories:
-    - $HOME/.pub-cache/hosted
-script: ./tool/travis.sh
+    - $HOME/.pub-cache
