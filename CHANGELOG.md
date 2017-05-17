@@ -1,3 +1,7 @@
+## 0.5.1+3
+
+* Support the latest `cli_util` package.
+
 ## 0.5.1+2
 
 * Support the latest `analyzer` package.
