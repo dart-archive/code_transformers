@@ -6,10 +6,9 @@ dart:
 dart_task:
   - test: --platform vm
   - dartanalyzer: --fatal-warnings .
-  - dartfmt
 
 matrix:
-  allow_failures:
+  include:
   - dart: dev
     dart_task: dartfmt
 
