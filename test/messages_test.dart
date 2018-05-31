@@ -97,8 +97,8 @@ main() {
         expect(table.entries[_id('hi', 11)].length, 2);
         expect(table.entries[_id('hi', 13)].length, 1);
 
-        var table2 =
-            new LogEntryTable.fromJson((toJson(table) as Map).cast<String, Iterable>());
+        var table2 = new LogEntryTable.fromJson(
+            (toJson(table) as Map).cast<String, Iterable>());
         expect(table2.entries.length, 2);
         expect(table2.entries[_id('hi', 11)].length, 2);
         expect(table2.entries[_id('hi', 13)].length, 1);
