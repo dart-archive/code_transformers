@@ -37,7 +37,7 @@ class AsyncBenchmarkBase {
 
   // Measures the score for this benchmark by executing it repeatedly until
   // time minimum has been reached.
-  static Future<double> measureFor(Function f, int minimumMillis) {
+  static Future<double> measureFor(Future Function() f, int minimumMillis) {
     int minimumMicros = minimumMillis * 1000;
     int iter = 0;
     Stopwatch watch = new Stopwatch();
