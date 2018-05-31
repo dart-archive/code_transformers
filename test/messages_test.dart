@@ -6,7 +6,7 @@
 @TestOn('vm')
 library polymer.test.build.messages_test;
 
-import 'dart:convert';
+import 'dart:convert' show json;
 import 'package:test/test.dart';
 import 'package:code_transformers/messages/messages.dart';
 import 'package:source_span/source_span.dart';
@@ -48,7 +48,7 @@ main() {
 
   for (var encode in [true, false]) {
     var toJson =
-        encode ? (o) => o.toJson() : (o) => JSON.decode(JSON.encode(o));
+        encode ? (o) => o.toJson() : (o) => json.decode(json.encode(o));
     group('serialize/deserialize ${encode ? "and stringify": ""}', () {
       test('message id', () {
         _eq(msg) {

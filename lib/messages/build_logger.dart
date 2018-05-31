@@ -5,7 +5,7 @@
 library code_transformers.messages.messages_logger;
 
 import 'dart:async';
-import 'dart:convert' show JSON;
+import 'dart:convert' show json;
 
 import 'package:barback/barback.dart';
 import 'package:source_span/source_span.dart';
@@ -104,7 +104,7 @@ class BuildLogger implements TransformLogger {
   /// Outputs the log data to a JSON serialized file.
   Future writeOutput() {
     return _getNextLogAssetId().then((id) {
-      _transform.addOutput(new Asset.fromString(id, JSON.encode(_logs)));
+      _transform.addOutput(new Asset.fromString(id, json.encode(_logs)));
     });
   }
 
@@ -126,7 +126,7 @@ class BuildLogger implements TransformLogger {
       if (!exists) return null;
       return transform.readInputAsString(nextAssetPath).then((data) {
         entries.addAll(new LogEntryTable.fromJson(
-            JSON.decode(data) as Map<String, Iterable>));
+            json.decode(data) as Map<String, Iterable>));
         return _readLogFilesForAsset(id, transform, entries, ++nextNumber);
       });
     });
@@ -141,7 +141,7 @@ class BuildLogger implements TransformLogger {
     return _readLogFilesForAsset(primaryId, transform, entries).then((_) {
       return transform.addOutput(new Asset.fromString(
           primaryId.addExtension(LOG_EXTENSION),
-          JSON.encode(entries.toJson())));
+          json.encode(entries.toJson())));
     });
   }
 
