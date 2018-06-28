@@ -31,11 +31,9 @@ main() {
 
     test('can pass arguments to create snippet', () {
       expect(
-          new MessageTemplate(
-              _id('code_transformers', 1),
-              'a %-b-% c something %-name-% too',
-              '',
-              '').create({'b': "1", 'name': 'foo'}).snippet,
+          new MessageTemplate(_id('code_transformers', 1),
+                  'a %-b-% c something %-name-% too', '', '')
+              .create({'b': "1", 'name': 'foo'}).snippet,
           'a 1 c something foo too');
     });
   });

@@ -145,7 +145,6 @@ String assetIdToUri(AssetId assetId,
         .toString();
   }
 
-  return Uri
-      .parse('package:${assetId.package}/${assetId.path.substring(4)}')
+  return Uri.parse('package:${assetId.package}/${assetId.path.substring(4)}')
       .toString();
 }
