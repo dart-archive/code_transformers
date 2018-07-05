@@ -47,7 +47,7 @@ main() {
   for (var encode in [true, false]) {
     var toJson =
         encode ? (o) => o.toJson() : (o) => json.decode(json.encode(o));
-    group('serialize/deserialize ${encode ? "and stringify": ""}', () {
+    group('serialize/deserialize ${encode ? "and stringify" : ""}', () {
       test('message id', () {
         _eq(msg) {
           expect(new MessageId.fromJson(toJson(msg)) == msg, isTrue);
